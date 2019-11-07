@@ -1,5 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const config = require("config");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -7,6 +9,7 @@ const router = express.Router();
 
 const User = require("../../models/User");
 
+//Registering New Users
 //@route GET api/users
 //$desc Registering a new user
 //@access Public
@@ -34,12 +37,17 @@ router.post("/", (req, res) => {
 				if (err) throw err; //err NEED HANDLING FUNCTIONALITY?
 				newUser.password = hash; //save password as hash
 				newUser.save().then(user => {
-					res.json({
-						user: {
-							id: user.id,
-							firstName: user.firstName,
-							email: user.email
-						}
+					//payload can be anything, *****
+					jwt.sign({ id: user.id }, config.get("jwtSecret"), { expiresIn: 7200 }, (err, token) => {
+						if (err) throw err;
+						res.json({
+							token, //same as token = token
+							user: {
+								id: user.id,
+								firstName: user.firstName,
+								email: user.email
+							}
+						});
 					});
 				});
 			});

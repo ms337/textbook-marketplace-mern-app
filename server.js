@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+const config = require("config");
 
 const users = require("./routes/api/users");
-const login = require("./routes/api/login");
+const auth = require("./routes/api/auth");
 const books = require("./routes/api/books");
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(express.json());
 
 //DB Config
 
-const db = require("./config/keys").mongoURI; //MongoURI specified in config file
+const db = config.get("mongoURI"); //MongoURI specified in config file
 
 mongoose
 	.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -23,7 +23,7 @@ mongoose
 app.use("/api/users", users);
 
 //Login route
-app.use("/api/login", login);
+app.use("/api/auth", auth);
 
 //Books route
 app.use("/api/books", books);

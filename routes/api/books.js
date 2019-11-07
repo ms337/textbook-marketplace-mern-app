@@ -2,8 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-//Book Model
+const auth = require("../../middleware/auth");
 
+//Book Model
 const Book = require("../../models/Book");
 
 //@route GET api/books
@@ -16,7 +17,7 @@ router.get("/", (req, res) => {
 //@route POST api/books
 //@desc  Create a Book
 //@access Public
-router.post("/", (req, res) => {
+router.post("/", auth, (req, res) => {
 	let newBook = new Book({
 		name: req.body.name,
 		author: req.body.author,
@@ -29,10 +30,10 @@ router.post("/", (req, res) => {
 
 //@route POST api/books
 //@desc  Create a Book
-//@access SHOULD BE PRIVATE
+//@access SHOULD BE PRIVATE : now done through tokens
 
 //NEED TO FIX THIS
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth, (req, res) => {
 	Book.findById(req.params.id) //gives promise back
 		.then(book => book.remove().then(() => res.json({ success: true })))
 		.catch(err => res.status(404).json({ success: false }));
