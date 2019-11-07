@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const bcrypt = requrie("brcypt");
+const bcrypt = require("bcrypt");
 SALT_WORK_FACTOR = 10; //to defeat rainbow table attack and resist brute-force attacks
 
 const Schema = mongoose.Schema;
 
 //Create schema
 
-const UserSchema = new Schema({
+var UserSchema = new Schema({
 	email: { type: String, required: true, index: { unique: true } },
 	password: { type: String, required: true },
 	firstName: {
@@ -24,7 +24,6 @@ UserSchema.pre("save", () => {
 
 	//do not hash the password if it is not modified
 	if (!user.isModified("password")) return next();
-
 	//generate a salt
 
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -51,4 +50,4 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 // creating model to use schema and export it
 
-module.exports = User = mongoose.model(User, UserSchema);
+module.exports = mongoose.model("User", UserSchema);
