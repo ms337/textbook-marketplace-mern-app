@@ -11,7 +11,8 @@ const BookSchema = new Schema({
 	courses: { type: [String], required: true },
 	price: { type: mongoose.Decimal128, required: true },
 	program: { type: String, required: false },
-	quality: { type: Number, required: true }
+	quality: { type: Number, required: true },
+	seller: { type: Schema.Types.ObjectId, ref: "User", required: true }
 });
 
 module.exports = mongoose.model("Book", BookSchema);

@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const config = require("config");
 const jwt = require("jsonwebtoken");
 
+const auth = require("../../middleware/auth"); //To include authentication when transacting books
+
 const router = express.Router();
 
 //User Model
@@ -53,6 +55,64 @@ router.post("/", (req, res) => {
 			});
 		});
 	});
+});
+
+//Making offer to buy a book
+//@route PUT /api/users/id
+//$desc
+//@access Private
+
+router.put("/:id", auth, (req, res) => {
+	try {
+		if (req.params.id != req.user.id) {
+			throw e;
+		}
+
+		if (req.body.action == "buying") {
+			//Making offer to Buy
+			User.findByIdAndUpdate(req.params.id, { $push: { toBuy: req.body.bookId } })
+				.then(() => {
+					User.findByIdAndUpdate(req.body.sellerId, {
+						$push: { offers: { book: req.body.bookId, buyer: req.body.buyerId } }
+					})
+						.then(res.json({ success: true }))
+						.catch(err =>
+							res.status(404).json({ success: false, message: "Book could not be added to Seller's offers" })
+						);
+				})
+				.catch(err => res.status(404).json({ success: false, message: "Book could not be added to buyer's toBuy[]" }));
+		} else if (req.body.action == "selling") {
+			//Confirming offer to Sell
+			User.findByIdAndUpdate(req.params.id, {
+				$pull: { toSell: req.body.bookId, offers: { book: req.body.bookId, buyer: req.body.buyerId } },
+				$push: { sold: { book: req.body.bookId, buyer: req.body.buyerId } }
+			})
+				.then(() => {
+					User.findByIdAndUpdate(req.body.buyerId, { $pull: { toBuy: { book: req.body.bookId } } }) //Remove from toBuy
+						.then(() => {
+							Book.findByIdAndDelete(req.body.bookId) //Delete book from DB
+								.then(res.json({ success: true }))
+								.catch(err => res.status(404).json({ success: false, message: "Book could not be deleted from DB" }));
+						})
+						.catch(err =>
+							res.status(404).json({ success: false, message: "Could not update buyer to remove the book from toBuy" })
+						);
+				})
+				.catch(err =>
+					res.status(404).json({
+						success: false,
+						message:
+							"Could not update seller to 1. remove the book from toSell[], 2. remove from offers[], 3. add to sold[]"
+					})
+				);
+		}
+	} catch (e) {
+		console.log("User modifying entry to add books to Buy is different from the user whose entry is being modified.");
+		res.status(404).json({
+			success: false,
+			message: "Unauthorized user trying to add to list, i.e. adding to some other user's toBuy."
+		});
+	}
 });
 
 module.exports = router;
