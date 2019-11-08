@@ -15,4 +15,10 @@ const BookSchema = new Schema({
 	seller: { type: Schema.Types.ObjectId, ref: "User", required: true }
 });
 
+BookSchema.index({ name: "text", author: "text" });
 module.exports = mongoose.model("Book", BookSchema);
+
+// Book.find({ $text: { $search: req.query.search } }, { score: { $meta: "textScore" } })
+// 	.sort({ score: { $meta: "textScore" } })
+// 	.limit(100)
+// 	.then(items => res.json(items));

@@ -7,11 +7,24 @@ const auth = require("../../middleware/auth");
 //Book Model
 const Book = require("../../models/Book");
 const User = require("../../models/User");
+
+//text is query : cf> https://stackoverflow.com/questions/38421664/fuzzy-searching-with-mongodb
+function escapeRegex(text) {
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 //@route GET api/books
 //@desc Get all books
-//@access Public
+//@access Publicxw
 router.get("/", auth, (req, res) => {
-	Book.find().then(items => res.json(items));
+	if (req.query.search) {
+		// escapeRegex(req.query.search);
+		const regex = new RegExp(escapeRegex(req.query.search), "gi"); //gi are flags
+
+		Book.find({ name: regex }).then(items => res.json(items));
+	} else {
+		Book.find().then(items => res.json(items));
+	}
 });
 
 //Case 1: add to toSell, and Books Db
