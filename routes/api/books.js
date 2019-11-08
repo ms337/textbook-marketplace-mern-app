@@ -10,7 +10,7 @@ const User = require("../../models/User");
 //@route GET api/books
 //@desc Get all books
 //@access Public
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
 	Book.find().then(items => res.json(items));
 });
 

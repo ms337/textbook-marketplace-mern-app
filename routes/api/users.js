@@ -10,6 +10,7 @@ const router = express.Router();
 //User Model
 
 const User = require("../../models/User");
+const Book = require("../../models/Book");
 
 //Registering New Users
 //@route GET api/users
@@ -70,47 +71,53 @@ router.put("/:id", auth, (req, res) => {
 
 		if (req.body.action == "buying") {
 			//Making offer to Buy
-			User.findByIdAndUpdate(req.params.id, { $push: { toBuy: req.body.bookId } })
-				.then(() => {
-					User.findByIdAndUpdate(req.body.sellerId, {
-						$push: { offers: { book: req.body.bookId, buyer: req.body.buyerId } }
-					})
-						.then(res.json({ success: true }))
-						.catch(err =>
-							res.status(404).json({ success: false, message: "Book could not be added to Seller's offers" })
-						);
-				})
-				.catch(err => res.status(404).json({ success: false, message: "Book could not be added to buyer's toBuy[]" }));
+
+			User.findByIdAndUpdate(req.params.id, { $push: { toBuy: req.body.bookId } }).catch(err => {
+				return res.json({ success: false, message: "Cannot add the book to buyer's toBuys", err: err });
+			});
+
+			User.findByIdAndUpdate(req.body.sellerId, {
+				$push: { offers: { book: req.body.bookId, buyer: req.body.buyerId } }
+			})
+				.then(() => res.json({ success: true }))
+				.catch(err => {
+					return res.json({
+						success: false,
+						message: "Cannot make offer to seller: cannot add to seller's offers[]",
+						err: err
+					});
+				});
 		} else if (req.body.action == "selling") {
 			//Confirming offer to Sell
+
 			User.findByIdAndUpdate(req.params.id, {
 				$pull: { toSell: req.body.bookId, offers: { book: req.body.bookId, buyer: req.body.buyerId } },
 				$push: { sold: { book: req.body.bookId, buyer: req.body.buyerId } }
-			})
-				.then(() => {
-					User.findByIdAndUpdate(req.body.buyerId, { $pull: { toBuy: { book: req.body.bookId } } }) //Remove from toBuy
-						.then(() => {
-							Book.findByIdAndDelete(req.body.bookId) //Delete book from DB
-								.then(res.json({ success: true }))
-								.catch(err => res.status(404).json({ success: false, message: "Book could not be deleted from DB" }));
-						})
-						.catch(err =>
-							res.status(404).json({ success: false, message: "Could not update buyer to remove the book from toBuy" })
-						);
-				})
-				.catch(err =>
-					res.status(404).json({
-						success: false,
-						message:
-							"Could not update seller to 1. remove the book from toSell[], 2. remove from offers[], 3. add to sold[]"
-					})
-				);
+			}).catch(err => {
+				return res.status(404).json({
+					success: false,
+					message:
+						"Could not update seller to 1. remove the book from toSell[], 2. remove from offers[], 3. add to sold[]"
+				});
+			});
+
+			User.findByIdAndUpdate(req.body.buyerId, { $pull: { toBuy: req.body.bookId } }) //Remove from toBuy
+				.catch(err => {
+					return res
+						.status(404)
+						.json({ success: false, message: "Could not update buyer to remove the book from toBuy" });
+				});
+
+			Book.findByIdAndDelete(req.body.bookId) //Delete book from DB
+				.then(res.json({ success: true }))
+				.catch(err => {
+					return res.status(404).json({ success: false, message: "Book could not be deleted from DB" });
+				});
 		}
 	} catch (e) {
-		console.log("User modifying entry to add books to Buy is different from the user whose entry is being modified.");
 		res.status(404).json({
 			success: false,
-			message: "Unauthorized user trying to add to list, i.e. adding to some other user's toBuy."
+			message: "User modifying is not authenticated by token"
 		});
 	}
 });
