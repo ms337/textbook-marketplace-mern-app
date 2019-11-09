@@ -5,18 +5,20 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import uuid from "uuid"; //just for testing
 
+import { connect } from "react-redux"; //allows us to get state from redux into a react component
+import { getBooks } from "../actions/bookActions"; //import action
+
+import PropTypes from "prop-types";
+
 class BooksList extends Component {
-	state = {
-		books: [
-			{ id: uuid(), name: "Book1" },
-			{ id: uuid(), name: "Book2" },
-			{ id: uuid(), name: "Book3" },
-			{ id: uuid(), name: "Book4" }
-		]
-	};
+	//Lifecycle method: api requests, actions happen here
+	componentDidMount() {
+		this.props.getBooks();
+	}
 
 	render() {
-		const { books } = this.state;
+		//book represent our entire state object, books represents the array
+		const { books } = this.props.book;
 		return (
 			<Container>
 				<Button
@@ -60,4 +62,20 @@ class BooksList extends Component {
 		);
 	}
 }
-export default BooksList;
+
+BooksList.propTypes = {
+	//action from redux is store as a prop
+	getBooks: PropTypes.func.isRequired,
+	book: PropTypes.object.isRequired //represent a state
+};
+
+const mapStateToProps = state => ({
+	//root reducer key for this componentsReducer or is it the value
+	book: state.book
+});
+
+//mapping function, {actions to be executed},, component name
+export default connect(
+	mapStateToProps,
+	{ getBooks }
+)(BooksList);

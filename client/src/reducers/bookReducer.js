@@ -7,7 +7,7 @@ const initialState = {
 		{ id: uuid(), name: "Book1" },
 		{ id: uuid(), name: "Book2" },
 		{ id: uuid(), name: "Book3" },
-		{ id: uuid(), name: "Book4" }
+		{ id: uuid(), name: "Changed" }
 	]
 };
 
