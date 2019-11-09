@@ -19,6 +19,13 @@ export default function(state = initialState, action) {
 			return {
 				...state //fetches only state
 			};
+
+		//can access payloads through action.payload
+		case DELETE_BOOK:
+			return {
+				...state,
+				books: state.books.filter(book => book.id != action.payload)
+			};
 		default:
 			return state;
 	}

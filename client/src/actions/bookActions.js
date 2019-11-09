@@ -8,3 +8,11 @@ export const getBooks = () => {
 		// payload:
 	};
 };
+//because it needs to delete by id
+export const deleteBook = id => {
+	return {
+		type: DELETE_BOOK,
+		payload: id
+		//need to send payload because id needs to communicated to reducer to delete by id.
+	};
+};
