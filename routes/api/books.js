@@ -21,7 +21,9 @@ router.get("/", auth, (req, res) => {
 		// escapeRegex(req.query.search);
 		const regex = new RegExp(escapeRegex(req.query.search), "gi"); //gi are flags
 
-		Book.find({ name: regex }).then(items => res.json(items));
+		Book.find({ $or: [{ name: regex }, { author: regex }] })
+			.explain(1)
+			.then(items => res.json(items));
 	} else {
 		Book.find().then(items => res.json(items));
 	}
