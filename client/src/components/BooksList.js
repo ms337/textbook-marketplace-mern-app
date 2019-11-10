@@ -24,20 +24,22 @@ class BooksList extends Component {
 			<Container>
 				<ListGroup>
 					<TransitionGroup className="books-list">
-						{books.map(({ id, name, author }) => (
-							<CSSTransition key={id} timeout={500} classNames="fade">
+						{books.map(({ _id, name, author }) => (
+							<CSSTransition key={_id} timeout={500} classNames="fade">
 								<ListGroupItem>
 									<Button
 										className="remove-btn"
 										color="danger"
 										size="sm"
-										onClick={this.onDeleteClick.bind(this, id)} //
+										onClick={this.onDeleteClick.bind(this, _id)} //
 									>
 										&times;
 									</Button>
 									{name}
 									<br />
 									{author}
+									<br />
+									{_id}
 								</ListGroupItem>
 							</CSSTransition>
 						))}

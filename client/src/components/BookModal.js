@@ -6,7 +6,7 @@ import { connect } from "react-redux"; //allows us to get state from redux into 
 
 import { addBook } from "../actions/bookActions"; //import action
 import { Model } from "mongoose";
-import uuid from "uuid"; //just for testing
+
 import PropTypes from "prop-types";
 
 class BookModal extends Component {
@@ -14,7 +14,12 @@ class BookModal extends Component {
 	//whenever form, form input pieces needs to have pieces of state in component
 	state = {
 		modal: false,
-		name: ""
+		name: "",
+		author: "",
+		courses: ["CS", "PHIL"],
+		price: 0,
+		quality: -1,
+		seller: 123
 	};
 
 	//to toggle to modal view
@@ -35,8 +40,13 @@ class BookModal extends Component {
 	onSubmit = e => {
 		e.preventDefault();
 		const newBook = {
-			id: uuid(),
-			name: this.state.name
+			//MongoDB will create id on its own
+			name: this.state.name,
+			author: this.state.author,
+			courses: ["CS", "PHIL"],
+			price: this.state.price,
+			quality: 4,
+			seller: 123
 		};
 
 		//Add book via addBook action
@@ -57,7 +67,9 @@ class BookModal extends Component {
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="book">Book</Label>
-								<Input type="text" name="name" id="book" placeholder="Add book" onChange={this.onChange} />
+								<Input type="text" name="name" placeholder="Add book name" onChange={this.onChange} />
+								<Input type="text" name="author" placeholder="Add book author" onChange={this.onChange} />
+								<Input type="text" name="price" placeholder="Add book price" onChange={this.onChange} />
 								<Button color="dark" style={{ marginTop: "2rem" }} block>
 									Add Item
 								</Button>

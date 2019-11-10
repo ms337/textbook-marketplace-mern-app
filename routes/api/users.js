@@ -18,10 +18,10 @@ const Book = require("../../models/Book");
 //@access Public
 
 router.post("/", (req, res) => {
-	const { firstName, email, password } = req.body;
+	const { name, email, password } = req.body;
 
 	//Validation
-	if (!firstName || !email || !password) {
+	if (!name || !email || !password) {
 		return res.status(400).json({ message: "Please enter all the fields" }); //bad request
 	}
 	//Check for existing user
@@ -29,7 +29,7 @@ router.post("/", (req, res) => {
 		if (user) return res.status(400).json({ message: "User already exists" });
 
 		const newUser = new User({
-			firstName,
+			name,
 			email,
 			password
 		});
@@ -47,7 +47,7 @@ router.post("/", (req, res) => {
 							token, //same as token = token
 							user: {
 								id: user.id,
-								firstName: user.firstName,
+								name: user.name,
 								email: user.email
 							}
 						});

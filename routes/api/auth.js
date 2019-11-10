@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
 					token, //same as token = token
 					user: {
 						id: user.id,
-						firstName: user.firstName,
+						name: user.name,
 						email: user.email
 					}
 				});
@@ -58,4 +58,5 @@ router.get("/user", auth, (req, res) => {
 		.select("-password")
 		.then(user => res.json(user));
 });
+
 module.exports = router;

@@ -16,7 +16,9 @@ function escapeRegex(text) {
 //@route GET api/books
 //@desc Get all books
 //@access Publicxw
-router.get("/", auth, (req, res) => {
+
+//NEEEEED TO PUT BACK auth middle argument
+router.get("/", (req, res) => {
 	if (req.query.search) {
 		// escapeRegex(req.query.search);
 		const regex = new RegExp(escapeRegex(req.query.search), "gi"); //gi are flags
@@ -33,6 +35,8 @@ router.get("/", auth, (req, res) => {
 //@route POST api/books
 //@desc  Create a Book
 //@access private, will find user calling the function, i.e. creating the posting to sell the book and add to his to Sell books
+
+//NEEEEED TO PUT BACK auth middle argument
 router.post("/", auth, (req, res) => {
 	let newBook = new Book({
 		name: req.body.name,
@@ -45,7 +49,7 @@ router.post("/", auth, (req, res) => {
 	newBook
 		.save()
 		.then(book => {
-			User.findByIdAndUpdate(req.user.id, { $push: { toSell: book.id } })
+			User.findByIdAndUpdate(req.user.id, { $push: { toSell: book._id } })
 				.then(() => res.json(book))
 				.catch(err => {
 					res.status(404).json({ success: false });

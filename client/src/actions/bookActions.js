@@ -24,11 +24,13 @@ export const deleteBook = id => {
 	};
 };
 
-export const addBook = newBook => {
-	return {
-		type: ADD_BOOK,
-		payload: newBook
-	};
+export const addBook = newBook => dispatch => {
+	axios.post("/api/books/", newBook).then(res =>
+		dispatch({
+			type: ADD_BOOK,
+			payload: res.data
+		})
+	);
 };
 
 export const setBooksLoading = () => {

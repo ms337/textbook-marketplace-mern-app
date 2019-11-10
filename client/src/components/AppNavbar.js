@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Container } from "reactstrap";
+import RegisterModal from "./auth/RegisterModal";
+import Logout from "./auth/Logout";
 
 class AppNavbar extends Component {
 	state = {
@@ -25,10 +27,13 @@ class AppNavbar extends Component {
 									<NavLink href="./">About</NavLink>
 								</NavItem>
 								<NavItem>
-									<NavLink href="./">Sign Up</NavLink>
+									<NavLink href="./">Login</NavLink>
 								</NavItem>
 								<NavItem>
-									<NavLink href="./">Login</NavLink>
+									<RegisterModal />
+								</NavItem>
+								<NavItem>
+									<Logout />
 								</NavItem>
 							</Nav>
 						</Collapse>

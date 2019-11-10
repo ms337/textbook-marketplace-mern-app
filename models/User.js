@@ -12,13 +12,9 @@ const Schema = mongoose.Schema;
 var UserSchema = new Schema({
 	email: { type: String, required: true, index: { unique: true } },
 	password: { type: String, required: true },
-	firstName: {
+	name: {
 		type: String,
 		required: true
-	},
-	lastName: {
-		type: String,
-		required: false
 	},
 	toBuy: [{ type: Schema.Types.ObjectId, ref: "Book" }],
 	toSell: [{ type: Schema.Types.ObjectId, ref: "Book" }],
