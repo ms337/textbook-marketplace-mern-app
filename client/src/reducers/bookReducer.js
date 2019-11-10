@@ -1,14 +1,10 @@
 import uuid from "uuid"; //just for testing
 
-import { GET_BOOKS, ADD_BOOK, DELETE_BOOK } from "../actions/types";
+import { GET_BOOKS, ADD_BOOK, DELETE_BOOK, BOOKS_LOADING } from "../actions/types";
 
 const initialState = {
-	books: [
-		{ id: uuid(), name: "Book1" },
-		{ id: uuid(), name: "Book2" },
-		{ id: uuid(), name: "Book3" },
-		{ id: uuid(), name: "Changed" }
-	]
+	books: [],
+	loading: false //need to b/c data could take time time, once request is made, set to true
 };
 
 //action will have a type
@@ -17,7 +13,9 @@ export default function(state = initialState, action) {
 	switch (action.type) {
 		case GET_BOOKS:
 			return {
-				...state //fetches only state
+				...state, //copying the state
+				books: action.payload, //adding items to this copy
+				loading: false //set loading back
 			};
 
 		//can access payloads through action.payload
@@ -25,6 +23,16 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				books: state.books.filter(book => book.id != action.payload)
+			};
+		case ADD_BOOK:
+			return {
+				...state,
+				books: [action.payload, ...state.books]
+			};
+		case BOOKS_LOADING:
+			return {
+				...state,
+				loading: true
 			};
 		default:
 			return state;

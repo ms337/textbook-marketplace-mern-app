@@ -24,7 +24,7 @@ class BooksList extends Component {
 			<Container>
 				<ListGroup>
 					<TransitionGroup className="books-list">
-						{books.map(({ id, name }) => (
+						{books.map(({ id, name, author }) => (
 							<CSSTransition key={id} timeout={500} classNames="fade">
 								<ListGroupItem>
 									<Button
@@ -36,6 +36,8 @@ class BooksList extends Component {
 										&times;
 									</Button>
 									{name}
+									<br />
+									{author}
 								</ListGroupItem>
 							</CSSTransition>
 						))}
