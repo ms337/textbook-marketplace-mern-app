@@ -2,18 +2,21 @@
 import { GET_BOOKS, ADD_BOOK, DELETE_BOOK, BOOKS_LOADING } from "./types";
 import axios from "axios";
 
+import { returnErrors } from "./errorActions";
+
 //this function below will be called from component
 export const getBooks = () => dispatch => {
 	//dispatch to send type along with data to reducer
 	dispatch(setBooksLoading());
 	axios
 		.get("/api/books") //uses proxy in package.json; returns a promise
-		.then(res =>
+		.then(res => {
 			dispatch({
 				type: GET_BOOKS,
 				payload: res.data
-			})
-		);
+			});
+		})
+		.catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 //because it needs to delete by id
 export const deleteBook = id => {

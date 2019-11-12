@@ -8,7 +8,9 @@ import {
 	USER_LOADING,
 	REGISTER_SUCCESS,
 	REGISTER_FAIL,
-	LOGOUT_SUCCESS
+	LOGOUT_SUCCESS,
+	LOGIN_SUCCESS,
+	LOGIN_FAIL
 } from "../actions/types";
 
 //Check token and load user
@@ -55,6 +57,35 @@ export const register = ({ name, email, password }) => dispatch => {
 			dispatch(returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")); //errors
 			dispatch({
 				type: REGISTER_FAIL
+			});
+		});
+};
+
+//LOGIN USER
+
+export const login = ({ email, password }) => dispatch => {
+	//destructuring right here
+	//headers, need to add a header value of content type
+	const config = {
+		headers: {
+			"Content-Type": "application/json"
+		}
+	};
+	//Request body: thhe request data we are going to send
+	const body = JSON.stringify({ email, password });
+
+	axios
+		.post("/api/auth", body, config) //data, headers
+		.then(res =>
+			dispatch({
+				type: LOGIN_SUCCESS,
+				payload: res.data //everything in the data
+			})
+		)
+		.catch(err => {
+			dispatch(returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")); //errors
+			dispatch({
+				type: LOGIN_FAIL
 			});
 		});
 };

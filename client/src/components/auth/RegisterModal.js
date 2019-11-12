@@ -1,18 +1,6 @@
 import React, { Component } from "react";
 
-import {
-	Button,
-	Modal,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	NavLink,
-	Alert
-} from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, NavLink, Alert } from "reactstrap";
 
 //Redux related things
 import { connect } from "react-redux";
