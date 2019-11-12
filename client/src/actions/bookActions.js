@@ -2,42 +2,56 @@
 import { GET_BOOKS, ADD_BOOK, DELETE_BOOK, BOOKS_LOADING } from "./types";
 import axios from "axios";
 
+import { tokenConfig } from "./authActions";
 import { returnErrors } from "./errorActions";
 
 //this function below will be called from component
 export const getBooks = () => dispatch => {
-	//dispatch to send type along with data to reducer
-	dispatch(setBooksLoading());
-	axios
-		.get("/api/books") //uses proxy in package.json; returns a promise
-		.then(res => {
-			dispatch({
-				type: GET_BOOKS,
-				payload: res.data
-			});
-		})
-		.catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+  //dispatch to send type along with data to reducer
+  dispatch(setBooksLoading());
+  axios
+    .get("/api/books") //uses proxy in package.json; returns a promise
+    .then(res => {
+      dispatch({
+        type: GET_BOOKS,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 //because it needs to delete by id
-export const deleteBook = id => {
-	return {
-		type: DELETE_BOOK,
-		payload: id
-		//need to send payload because id needs to communicated to reducer to delete by id.
-	};
+export const deleteBook = id => (dispatch, getState) => {
+  axios
+    .delete(`/api/items/${id}`, tokenConfig(getState)) //attaches token to request
+    .then(res =>
+      dispatch({
+        type: DELETE_BOOK,
+        payload: id
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
-export const addBook = newBook => dispatch => {
-	axios.post("/api/books/", newBook).then(res =>
-		dispatch({
-			type: ADD_BOOK,
-			payload: res.data
-		})
-	);
+export const addBook = newBook => (dispatch, getState) => {
+  axios
+    .post("/api/books/", newBook, tokenConfig(getState))
+    .then(res =>
+      dispatch({
+        type: ADD_BOOK,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 export const setBooksLoading = () => {
-	return {
-		type: BOOKS_LOADING
-	};
+  return {
+    type: BOOKS_LOADING
+  };
 };

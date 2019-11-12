@@ -38,8 +38,6 @@ class AppNavbar extends Component {
       <Fragment>
         <NavItem>
           <span className="navbar-text mr-3" style={{ fontWeight: 100 }}>
-            {/* {(fullName = user.name.split(" "));}
-            firstName = fullName[0] } */}
             {user ? `Welcome, ${user.name.split(" ")[0]}!` : ""}
           </span>
         </NavItem>
