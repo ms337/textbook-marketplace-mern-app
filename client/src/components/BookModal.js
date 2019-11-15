@@ -40,6 +40,10 @@ class BookModal extends Component {
     });
   };
 
+  static propTypes = {
+    isAuthenticated: PropTypes.bool
+  };
+
   //onChange function declared below in form so that whenever something is form is changed, that is some input is given, the components state is updated"
   //e is event parameter, could get e.target.value, using [e.target.name] refers to name prop and set it to value for whenever something else is typed in
   onChange = e => {
@@ -66,13 +70,17 @@ class BookModal extends Component {
   render() {
     return (
       <div>
-        <Button
-          color="dark"
-          style={{ marginBottom: "2rem" }}
-          onClick={this.toggle}
-        >
-          Add Book
-        </Button>
+        {this.props.isAuthenticated ? (
+          <Button
+            color="dark"
+            style={{ marginBottom: "2rem" }}
+            onClick={this.toggle}
+          >
+            Add Book
+          </Button>
+        ) : (
+          ""
+        )}
 
         {/* Modal takes properties inside depicting its component state */}
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
@@ -120,7 +128,8 @@ BookModal.propTypes = {
 
 const mapStateToProps = state => ({
   //root reducer key for this componentsReducer or is it the value
-  book: state.book
+  book: state.book,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 //mapping function, {actions to be executed},, component name

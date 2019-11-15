@@ -24,16 +24,17 @@ export const getBooks = () => dispatch => {
 //because it needs to delete by id
 export const deleteBook = id => (dispatch, getState) => {
   axios
-    .delete(`/api/items/${id}`, tokenConfig(getState)) //attaches token to request
+    .delete(`/api/books/${id}`, tokenConfig(getState)) //attaches token to request
     .then(res =>
       dispatch({
         type: DELETE_BOOK,
         payload: id
       })
     )
-    .catch(err =>
-      dispatch(returnErrors(err.response.data, err.response.status))
-    );
+    .catch(err => {
+      console.log(err.response.data);
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };
 
 export const addBook = newBook => (dispatch, getState) => {
@@ -45,9 +46,10 @@ export const addBook = newBook => (dispatch, getState) => {
         payload: res.data
       })
     )
-    .catch(err =>
-      dispatch(returnErrors(err.response.data, err.response.status))
-    );
+    .catch(err => {
+      console.log(err.response.data);
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };
 
 export const setBooksLoading = () => {

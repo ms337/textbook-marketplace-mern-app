@@ -10,16 +10,26 @@ const Schema = mongoose.Schema;
 //Create schema
 
 var UserSchema = new Schema({
-	email: { type: String, required: true, index: { unique: true } },
-	password: { type: String, required: true },
-	name: {
-		type: String,
-		required: true
-	},
-	toBuy: [{ type: Schema.Types.ObjectId, ref: "Book" }],
-	toSell: [{ type: Schema.Types.ObjectId, ref: "Book" }],
-	offers: [{ book: { type: Schema.Types.ObjectId, ref: "Book" }, buyer: { type: Schema.Types.ObjectId, ref: "User" } }],
-	sold: [{ book: { type: Schema.Types.ObjectId, ref: "Book" }, buyer: { type: Schema.Types.ObjectId, ref: "User" } }]
+  email: { type: String, required: true, index: { unique: true } },
+  password: { type: String, required: true },
+  name: {
+    type: String,
+    required: true
+  },
+  toBuy: [{ type: Schema.Types.ObjectId, ref: "Book" }],
+  toSell: [{ type: Schema.Types.ObjectId, ref: "Book" }],
+  offers: [
+    {
+      book: { type: Schema.Types.ObjectId, ref: "Book" },
+      buyer: { type: Schema.Types.ObjectId, ref: "User" }
+    }
+  ],
+  sold: [
+    {
+      book: { type: Schema.Types.ObjectId, ref: "Book" },
+      buyer: { type: Schema.Types.ObjectId, ref: "User" }
+    }
+  ]
 });
 
 // creating model to use schema and export it
