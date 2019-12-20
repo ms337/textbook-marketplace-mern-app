@@ -4,7 +4,7 @@ import BooksList from "./components/BooksList";
 import BookModal from "./components/BookModal";
 import Header from "./components/Header";
 
-import { Container } from "@material-ui/core";
+import { Container, Row, Col } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -23,9 +23,13 @@ function App() {
 			<div className="App">
 				<AppNavbar />
 				<Container>
-					<Header />
-					<BookModal />
-					<BooksList />
+					<Row className="mb-5">
+						<Header />
+					</Row>
+
+					<div>
+						<BooksList />
+					</div>
 				</Container>
 			</div>
 		</Provider>

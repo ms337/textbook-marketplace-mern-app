@@ -12,7 +12,8 @@ const BookSchema = new Schema({
 	price: { type: mongoose.Decimal128, required: true },
 	program: { type: String, required: false },
 	quality: { type: Number, required: true },
-	seller: { type: Schema.Types.ObjectId, ref: "User", required: true }
+	seller: { type: Schema.Types.ObjectId, ref: "User", required: true },
+	imageURL: { type: String, required: false }
 });
 
 BookSchema.index({ name: "text", author: "text" });

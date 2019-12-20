@@ -23,7 +23,6 @@ class Header extends Component {
 	static propTypes = {
 		//action from redux is store as a prop
 		getBooks: PropTypes.func.isRequired,
-		deleteBook: PropTypes.func.isRequired,
 		book: PropTypes.object.isRequired //represent a state
 	};
 

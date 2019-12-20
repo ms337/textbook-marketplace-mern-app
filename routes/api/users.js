@@ -24,6 +24,15 @@ router.post("/", (req, res) => {
 	if (!name || !email || !password) {
 		return res.status(400).json({ message: "Please enter all the fields" }); //bad request
 	}
+
+	//Email validation for UWO only
+	validDomains = ["uwo.ca"];
+
+	var splt = email.split("@");
+	if (!validDomains.includes(splt[1])) {
+		return res.status(400).json({ message: "Only @uwo.ca email addresses allowed." });
+	}
+
 	//Check for existing user
 	User.findOne({ email }).then(user => {
 		if (user) return res.status(400).json({ message: "User already exists" });

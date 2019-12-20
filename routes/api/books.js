@@ -8,10 +8,30 @@ const auth = require("../../middleware/auth");
 const Book = require("../../models/Book");
 const User = require("../../models/User");
 
+//CDN librarires
+const cloudinary = require("cloudinary");
+const multer = require("multer");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+
 //text is query : cf> https://stackoverflow.com/questions/38421664/fuzzy-searching-with-mongodb
 function escapeRegex(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
+
+//Cloudinary Config
+cloudinary.config({
+	cloud_name: "texchange",
+	api_key: 852474873596592,
+	api_secret: "Jb2scvfgedVSMn17DphW05GJFQc"
+});
+
+const storage = cloudinaryStorage({
+	cloudinary: cloudinary,
+	folder: "demo",
+	allowedFormats: ["jpg", "png"],
+	transformation: [{ width: 480, height: 640, crop: "limit" }]
+});
+const parser = multer({ storage: storage });
 
 //@route GET api/books
 //@desc Get all books
@@ -35,14 +55,16 @@ router.get("/", (req, res) => {
 //@access private, will find user calling the function, i.e. creating the posting to sell the book and add to his to Sell books
 
 //NEEEEED TO PUT BACK auth middle argument
-router.post("/", auth, (req, res) => {
+router.post("/", auth, parser.single("file"), (req, res) => {
+	console.log(req.file);
 	let newBook = new Book({
 		name: req.body.name,
 		author: req.body.author,
 		courses: req.body.courses,
 		price: req.body.price,
 		quality: req.body.quality,
-		seller: req.user.id
+		seller: req.user.id,
+		imageURL: req.file.url
 	});
 	newBook
 		.save()

@@ -1,5 +1,20 @@
 import React, { Component } from "react";
-import { Container, ListGroup, ListGroupItem, Button } from "reactstrap";
+import {
+	Row,
+	Col,
+	Container,
+	ListGroup,
+	ListGroupItem,
+	Card,
+	Button,
+	CardImg,
+	CardTitle,
+	CardText,
+	CardGroup,
+	CardColumns,
+	CardSubtitle,
+	CardBody
+} from "reactstrap";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -31,26 +46,46 @@ class BooksList extends Component {
 	render() {
 		//book represent our entire state object, books represents the array
 		const { books } = this.props.book;
+
+		const rowUnit = books.length / 4;
+		console.log(rowUnit);
+		const bookLayout = books.map(({ _id, name, author, imageURL }) => (
+			<Col xs="6" sm="auto">
+				<Card className="m-2">
+					{/*Need to control size of image*/}
+					<CardImg top width="100px" src={imageURL} />
+					<CardTitle>{name}</CardTitle>
+					<br />
+					<CardSubtitle>{author}</CardSubtitle>
+					<br />
+					{/* <CardText>{_id}</CardText> */}
+				</Card>
+			</Col>
+		));
+
 		return (
 			//make search bar here using forms and then bind to this button
-			<Container>
-				<br />
-				<ListGroup>
+			<div>
+				<Container>
+					{/* <br />
+				<CardColumns>
 					<TransitionGroup className="books-list">
 						{books.map(({ _id, name, author }) => (
 							<CSSTransition key={_id} timeout={500} classNames="fade">
-								<ListGroupItem>
-									{name}
+								<Card>
+									<CardTitle>{name}</CardTitle>
 									<br />
-									{author}
+									<CardSubtitle>{author}</CardSubtitle>
 									<br />
-									{_id}
-								</ListGroupItem>
+									<CardText>{_id}</CardText>
+								</Card>
 							</CSSTransition>
 						))}
 					</TransitionGroup>
-				</ListGroup>
-			</Container>
+				</CardColumns> */}
+					<Row>{bookLayout}</Row>
+				</Container>
+			</div>
 		);
 	}
 }
