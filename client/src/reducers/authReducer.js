@@ -13,7 +13,8 @@ const initialState = {
 	token: localStorage.getItem("token"),
 	isAuthenticated: null,
 	isLoading: false,
-	user: null
+	user: null,
+	justRegistered: false
 };
 
 //reducer function
@@ -33,8 +34,14 @@ export default function(state = initialState, action) {
 				isLoading: false,
 				user: action.payload //will send user as payload
 			};
-		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
+			return {
+				...state,
+				isAuthenticated: false,
+				justRegistered: true,
+				isLoading: false
+			};
+		case LOGIN_SUCCESS:
 			localStorage.setItem("token", action.payload.token);
 			return {
 				...state,

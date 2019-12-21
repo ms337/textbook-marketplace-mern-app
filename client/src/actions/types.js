@@ -19,3 +19,9 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+//For chat
+export const GET_MESSAGES = "GET_MESSAGES";
+export const SENT_MESSAGE = "SENT_MESSAGE";
+export const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const MESSAGES_LOADING = "MESSAGES_LOADING";

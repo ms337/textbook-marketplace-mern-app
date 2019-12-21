@@ -40,7 +40,8 @@ router.post("/", (req, res) => {
 		const newUser = new User({
 			name,
 			email,
-			password
+			password,
+			confirmed: false
 		});
 
 		//Create salt & hash

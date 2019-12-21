@@ -20,19 +20,22 @@ class RegisterModal extends Component {
 		email: "",
 		password: "",
 		//Show a msg if error, some message to be shown
-		message: null
+		message: null,
+		goToLoginMsg: false
 	};
 
 	//
 	static propTypes = {
 		isAuthenticated: PropTypes.bool,
+		justRegistered: PropTypes.bool,
 		error: PropTypes.object.isRequired,
 		register: PropTypes.func.isRequired,
 		clearErrors: PropTypes.func.isRequired
 	};
 
 	componentDidUpdate(prevProps) {
-		const { error, isAuthenticated } = this.props;
+		const { error, isAuthenticated, justRegistered } = this.props;
+		console.log(justRegistered);
 		if (error != prevProps.error) {
 			//Check for register error
 			if (error.id === "REGISTER_FAIL") {
@@ -46,8 +49,21 @@ class RegisterModal extends Component {
 			}
 		}
 
-		//If authenticated, close modal
+		if (justRegistered != prevProps.justRegistered) {
+			this.setState({
+				goToLoginMsg: true
+			});
+		}
 		if (this.state.modal) {
+			// if (this.state.modal) {
+			// 	if (justRegistered) {
+			// 		this.setState({
+			// 			goToLoginMsg: true
+			// 		});
+			// 	}
+			// }
+
+			//If authenticated, close modal
 			if (isAuthenticated) {
 				this.toggle();
 			}
@@ -99,6 +115,9 @@ class RegisterModal extends Component {
 					<ModalHeader toggle={this.toggle}>Register</ModalHeader>
 					<ModalBody>
 						{this.state.message ? <Alert color="danger">{this.state.message} </Alert> : null}
+						{this.state.goToLoginMsg ? (
+							<Alert color="success">A Verification email has been sent to your email </Alert>
+						) : null}
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="name">Name</Label>
@@ -143,6 +162,7 @@ class RegisterModal extends Component {
 const mapStateToProps = state => ({
 	//root reducer key for this componentsReducer or is it the value
 	//getting these from the reducer
+	justRegistered: state.auth.justRegistered,
 	isAuthenticated: state.auth.isAuthenticated,
 	error: state.error
 });

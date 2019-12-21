@@ -50,14 +50,15 @@ class BooksList extends Component {
 		const rowUnit = books.length / 4;
 		console.log(rowUnit);
 		const bookLayout = books.map(({ _id, name, author, imageURL }) => (
-			<Col xs="6" sm="auto">
+			<Col lg="3" md="4" sm="4" xs="6">
 				<Card className="m-2">
 					{/*Need to control size of image*/}
-					<CardImg top width="100px" src={imageURL} />
-					<CardTitle>{name}</CardTitle>
-					<br />
-					<CardSubtitle>{author}</CardSubtitle>
-					<br />
+					<CardImg width="100%" src={imageURL} />
+					<CardBody>
+						<CardTitle>{name}</CardTitle>
+						<CardSubtitle>{author}</CardSubtitle>
+					</CardBody>
+
 					{/* <CardText>{_id}</CardText> */}
 				</Card>
 			</Col>
@@ -83,7 +84,16 @@ class BooksList extends Component {
 						))}
 					</TransitionGroup>
 				</CardColumns> */}
-					<Row>{bookLayout}</Row>
+
+					<Row>
+						<Col lg="3" md="4" sm="4" xs="6">
+							<Button>Filter</Button>
+						</Col>
+					</Row>
+
+					<Container>
+						<Row>{bookLayout}</Row>
+					</Container>
 				</Container>
 			</div>
 		);

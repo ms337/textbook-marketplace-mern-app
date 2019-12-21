@@ -5,6 +5,7 @@ import RegisterModal from "./auth/RegisterModal";
 import LoginModal from "./auth/LoginModal";
 import Logout from "./auth/Logout";
 import BookModal from "./BookModal";
+import ChatModal from "./ChatModal";
 
 import { connect } from "react-redux"; //import connect to connect this component to state
 import PropTypes from "prop-types";
@@ -35,6 +36,9 @@ class AppNavbar extends Component {
 				</NavItem>
 				<NavItem>
 					<BookModal />
+				</NavItem>
+				<NavItem>
+					<ChatModal />
 				</NavItem>
 				<NavItem>
 					<Logout />
