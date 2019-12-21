@@ -29,19 +29,22 @@ router.post("/", auth, (req, res) => {
 	chat.seenByRec = false;
 	chat.fromName = fromName;
 
-	chat.save(err => {
-		if (err) res.send(err);
-		else res.json({ message: "Message sent!" });
-	});
+	chat
+		.save()
+		.then(messageArray => res.json(messageArray))
+		.catch(err => res.status(404).json({ success: false, message: err }));
 });
 
 // PUT to update a message the authenticated user sent
 router.put("/:chatId", auth, function(req, res) {
-	Chat.findByIdAndUpdate(req.params.chatId, { $push: { messageArray: req.body.message } }, function(err, message) {
-		if (err) res.send(err);
-		// Save the updates to the message
-		else res.json({ message: "Message edited!" });
-	});
+	Chat.findByIdAndUpdate(req.params.chatId, { $push: { messageArray: req.body.message } })
+		.then(messageArray => res.json(messageArray))
+		.catch(err => res.status(404).json({ success: false, message: err }));
+
+	// if (err) res.send(err);
+
+	// // Save the updates to the message
+	// else res.json({ message: "Message edited!" });
 });
 //Delete a message
 

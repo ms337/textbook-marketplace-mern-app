@@ -82,7 +82,11 @@ class ChatModal extends Component {
 		};
 		console.log(messageObject);
 		this.props.sendMessage(messageObject);
-		// this.closeMessageForm;
+		this.props.getMessages();
+
+		//BUGSS
+		this.closeMessageForm();
+		this.toggle();
 	};
 
 	selectMessage = params => {
@@ -90,8 +94,8 @@ class ChatModal extends Component {
 			messageSelectedBool: true,
 			messageSelectedId: params._id
 		});
-		console.log("Hey");
-		console.log(params);
+		// console.log("Hey");
+		// console.log(params);
 	};
 
 	closeMessageForm = () => {
@@ -109,7 +113,7 @@ class ChatModal extends Component {
 		};
 
 		const { messages } = this.props.messages;
-		console.log("MESSAGES");
+		// console.log("MESSAGES");
 		console.log(messages);
 		const messagesList = messages.map(({ _id, userIdFrom, messageArray, fromName, seen }) => (
 			//<ListGroupItem active={!seen} onClick={}> for seen unseen
@@ -140,6 +144,7 @@ class ChatModal extends Component {
 					<ModalBody>
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
+								{messagesList}
 								<Input type="text" name="message" placeholder="Type a message..." onChange={this.onChange} />
 								<Button color="dark" style={{ marginTop: "2rem" }} inline>
 									Send
