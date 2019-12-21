@@ -26,7 +26,7 @@ export default function(state = initialState, action) {
 		case SENT_MESSAGE:
 			return {
 				...state,
-				messages: [action.payload, ...state.message]
+				messages: [action.payload, ...state.messages]
 			};
 		case MESSAGES_LOADING:
 			return {

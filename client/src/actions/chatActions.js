@@ -36,9 +36,8 @@ export const deleteMessage = id => (dispatch, getState) => {
 		});
 };
 
-//send a message
-
-export const sendMessage = newMessage => (dispatch, getState) => {
+//send a new Message with POST
+export const sendNewMessage = newMessage => (dispatch, getState) => {
 	axios
 		.post("/api/chat/", newMessage, tokenConfig(getState))
 		.then(res =>
@@ -48,6 +47,22 @@ export const sendMessage = newMessage => (dispatch, getState) => {
 			})
 		)
 		.catch(err => {
+			console.log(err.response.data);
+			dispatch(returnErrors(err.response.data, err.response.status));
+		});
+};
+
+export const sendMessage = message => (dispatch, getState) => {
+	axios
+		.put(`/api/chat/${message._id}`, message, tokenConfig(getState))
+		.then(res =>
+			dispatch({
+				type: SENT_MESSAGE,
+				payload: res.data
+			})
+		)
+		.catch(err => {
+			console.log(err);
 			console.log(err.response.data);
 			dispatch(returnErrors(err.response.data, err.response.status));
 		});

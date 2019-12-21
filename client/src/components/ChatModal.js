@@ -9,7 +9,11 @@ import {
 	ListGroup,
 	ListGroupItem,
 	ListGroupItemHeading,
-	ListGroupItemText
+	ListGroupItemText,
+	Form,
+	FormGroup,
+	Label,
+	Input
 } from "reactstrap";
 
 import { connect } from "react-redux"; //allows us to get state from redux into a react component
@@ -26,7 +30,8 @@ class ChatModal extends Component {
 		modal: false,
 		showMessage: false,
 		messageSelectedBool: false,
-		messageSelected: null
+		messageSelectedId: null,
+		messageTyped: null
 	};
 
 	componentDidMount() {
@@ -50,12 +55,6 @@ class ChatModal extends Component {
 		this.props.getMessages();
 	};
 
-	closeMessageForm = () => {
-		this.setState({
-			messageSelectedBool: false
-		});
-	};
-
 	static propTypes = {
 		isAuthenticated: PropTypes.bool,
 		getMessages: PropTypes.func.isRequired,
@@ -71,19 +70,36 @@ class ChatModal extends Component {
 	// };
 
 	//tag called functions have an event parameter e
+
+	onChange = e => {
+		this.setState({ messageTyped: e.target.value });
+	};
 	onSubmit = e => {
 		e.preventDefault();
-
-		this.toggle();
+		var messageObject = {
+			_id: this.state.messageSelectedId,
+			message: this.state.messageTyped
+		};
+		console.log(messageObject);
+		this.props.sendMessage(messageObject);
+		// this.closeMessageForm;
 	};
 
 	selectMessage = params => {
 		this.setState({
 			messageSelectedBool: true,
-			messageSelected: params
+			messageSelectedId: params._id
 		});
 		console.log("Hey");
 		console.log(params);
+	};
+
+	closeMessageForm = () => {
+		this.setState({
+			messageSelectedBool: false,
+			messageSelectedId: null,
+			messageTyped: null
+		});
 	};
 
 	render() {
@@ -93,7 +109,8 @@ class ChatModal extends Component {
 		};
 
 		const { messages } = this.props.messages;
-		// console.log(messages);
+		console.log("MESSAGES");
+		console.log(messages);
 		const messagesList = messages.map(({ _id, userIdFrom, messageArray, fromName, seen }) => (
 			//<ListGroupItem active={!seen} onClick={}> for seen unseen
 			<ListGroupItem>
@@ -120,7 +137,16 @@ class ChatModal extends Component {
 
 				<Modal isOpen={this.state.messageSelectedBool} toggle={this.closeMessageForm}>
 					<ModalHeader toggle={this.closeMessageForm}>Inbox</ModalHeader>
-					<ModalBody>Send Message Here</ModalBody>
+					<ModalBody>
+						<Form onSubmit={this.onSubmit}>
+							<FormGroup>
+								<Input type="text" name="message" placeholder="Type a message..." onChange={this.onChange} />
+								<Button color="dark" style={{ marginTop: "2rem" }} inline>
+									Send
+								</Button>
+							</FormGroup>
+						</Form>
+					</ModalBody>
 				</Modal>
 			</div>
 		);
