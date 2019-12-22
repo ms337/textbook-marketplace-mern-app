@@ -2,7 +2,7 @@
 dist/
 
 # Config file
-config
+
 
 # Node stuff
 node_modules

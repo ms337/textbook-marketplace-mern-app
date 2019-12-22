@@ -1,0 +1,7 @@
+{
+	"mongoURI": "mongodb+srv://madhav:candice69@textapp-eerpz.mongodb.net/test?retryWrites=true&w=majority",
+	"jwtSecret": "mav_TextApp",
+	"emailJWTSecret": "email_TextApp",
+	"gmailId": "texchangeuwo@gmail.com",
+	"gmailPassword": "Author89!"
+}
