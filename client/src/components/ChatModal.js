@@ -131,7 +131,7 @@ class ChatModal extends Component {
 		return (
 			<div>
 				<Fragment>
-					<NavLink style={{ color: "white" }} onClick={this.toggle}>
+					<NavLink style={{ color: "black" }} onClick={this.toggle}>
 						Inbox
 					</NavLink>
 				</Fragment>

@@ -9,7 +9,9 @@ import {
 	InputGroupAddon,
 	ListGroup,
 	ListGroupItem,
-	Button
+	Button,
+	Row,
+	Col
 } from "reactstrap";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -38,29 +40,85 @@ class Header extends Component {
 	// onDeleteClick = id => {
 	// 	this.props.deleteBook(id);
 	// };
+
 	render() {
+		let pageHeader = React.createRef();
+		var func = () => {
+			if (window.innerWidth > 991) {
+				const updateScroll = () => {
+					let windowScrollTop = window.pageYOffset / 3;
+					pageHeader.current.style.transform = "translate3d(0," + windowScrollTop + "px,0)";
+				};
+				window.addEventListener("scroll", updateScroll);
+				return function cleanup() {
+					window.removeEventListener("scroll", updateScroll);
+				};
+			}
+		};
 		//book represent our entire state object, books represents the array
 		// const { books } = this.props.book;
 		return (
 			//make search bar here using forms and then bind to this button
+
 			<Fragment>
 				{/* <div className=header></div> */}
-				<Container>
-					<InputGroup>
-						<Input
-							className="form-control"
-							type="text"
-							name="search"
-							id="searchQuery"
-							placeholder="Search for textbooks here..."
-						/>
-						<InputGroupAddon addonType="append">
-							<Button color="secondary" onClick={this.onListBooksClick.bind(this)}>
-								Search
-							</Button>
-						</InputGroupAddon>
-					</InputGroup>
-				</Container>
+				<div className="page-header clear-filter" filter-color="blue">
+					<div
+						className="page-header-image"
+						style={{
+							backgroundImage: "url(" + require("../assets/bg.jpg") + ")"
+						}}
+					></div>
+					<Container>
+						<Row>
+							<Col className="col-md-10">
+								<br></br>
+								<br></br>
+
+								<h1 className="title" style={{ fontWeight: "400", fontSize: "60px", textAlign: "left" }}>
+									Personalized Textbook Trading.
+								</h1>
+								<h1 style={{ fontWeight: "200", fontSize: "40px", textAlign: "left" }}>For students, by students.</h1>
+
+								<br />
+							</Col>
+						</Row>
+						<br></br>
+						<Row>
+							<Col>
+								<div className="">
+									<div>
+										<InputGroup>
+											<Input
+												className="form-control"
+												type="text"
+												name="search"
+												id="searchQuery"
+												placeholder="Search for textbooks here..."
+												style={{ color: "black", borderRadius: "0.5rem 0rem 0rem O.5rem" }}
+											/>
+											<InputGroupAddon addonType="append">
+												<Button
+													color="primary"
+													style={{
+														height: "auto",
+														margin: "0rem",
+														border: "1px solid",
+														borderColor: "#680383",
+														borderRadius: "0rem 0.5rem O.5rem 0rem"
+													}}
+													onClick={this.onListBooksClick.bind(this)}
+												>
+													Search
+												</Button>
+											</InputGroupAddon>
+										</InputGroup>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					</Container>
+				</div>
 			</Fragment>
 		);
 	}

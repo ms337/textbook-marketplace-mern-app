@@ -81,7 +81,7 @@ class BookModal extends Component {
 		return (
 			<div>
 				<Fragment>
-					<NavLink style={{ color: "white" }} onClick={this.toggle}>
+					<NavLink style={{ color: "black" }} onClick={this.toggle}>
 						Post a Listing
 					</NavLink>
 				</Fragment>
@@ -93,11 +93,15 @@ class BookModal extends Component {
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="book">Book</Label>
+								<br></br>
 								<Input type="text" name="name" placeholder="Add book name" onChange={this.onChange} />
+								<br></br>
 								<Input type="text" name="author" placeholder="Add book author" onChange={this.onChange} />
+								<br></br>
 								<Input type="text" name="price" placeholder="Add book price" onChange={this.onChange} />
+								<br></br>
 								<Input type="file" name="file" placeholder="Upload an Image" onChange={this.fileSelectHandler} />
-								<Button color="dark" style={{ marginTop: "2rem" }} block>
+								<Button color="primary" style={{ marginTop: "2rem" }} block>
 									Create Listing
 								</Button>
 							</FormGroup>

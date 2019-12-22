@@ -10,6 +10,8 @@ import ChatModal from "./ChatModal";
 import { connect } from "react-redux"; //import connect to connect this component to state
 import PropTypes from "prop-types";
 
+import logo from "../assets/logo.png";
+
 class AppNavbar extends Component {
 	state = {
 		isOpen: false
@@ -30,9 +32,7 @@ class AppNavbar extends Component {
 		const authLinks = (
 			<Fragment>
 				<NavItem>
-					<span className="navbar-text mr-3" style={{ fontWeight: 100 }}>
-						{user ? `Welcome, ${user.name.split(" ")[0]}!` : ""}
-					</span>
+					<NavLink>{user ? `Welcome, ${user.name.split(" ")[0]}!` : ""}</NavLink>
 				</NavItem>
 				<NavItem>
 					<BookModal />
@@ -61,9 +61,23 @@ class AppNavbar extends Component {
 
 		return (
 			<div>
-				<Navbar expand="sm" className="mb-5">
+				<Navbar expand="sm">
 					<Container>
-						<NavbarBrand href="/">TextChange</NavbarBrand>
+						<NavbarBrand href="#">
+							<img
+								src={logo}
+								style={{
+									width: "48px",
+									height: "48px",
+									borderRadius: "50%",
+									overflow: "hidden",
+									marginTop: "-6px",
+									marginLeft: "0.5rem",
+									marginRight: "0.5rem"
+								}}
+							></img>
+							TextChange
+						</NavbarBrand>
 						<NavbarToggler onClick={this.toggle} />
 						<Collapse isOpen={this.state.isOpen} navbar>
 							<Nav className="ml-auto" navbar>
