@@ -76,7 +76,7 @@ class AppNavbar extends Component {
 									marginRight: "0.5rem"
 								}}
 							></img>
-							TextChange
+							TexChange
 						</NavbarBrand>
 						<NavbarToggler onClick={this.toggle} />
 						<Collapse isOpen={this.state.isOpen} navbar>

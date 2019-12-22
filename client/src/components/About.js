@@ -53,17 +53,17 @@ class About extends Component {
 								<h2 className="title" style={{ fontWeight: "600" }}>
 									Courses are hard enough, buying textbooks for them shouldn't be.
 								</h2>
-								<h5 className="description">
+								<h5 className="description" style={{ color: "#3C4858" }}>
 									Every semester students pay hundreds to thousands of dollars on required textbooks. Resale of these is
 									broken, with incomplete information, posts buried under hundreds of others, and groups everywhere with
 									only portions of what’s being sold. Welcome to the free centralized textbook trading platform of the
-									future, made for students by students.
+									future.
 								</h5>
 							</div>
 						</Row>
 						<div className="features">
 							<Row>
-								<Col md="4">
+								<Col md="4" style={{ paddingRight: "15px", paddingLeft: "15px" }}>
 									<div className="info">
 										<div className="icon icon-info">
 											<i className="material-icons">search</i>
@@ -75,7 +75,7 @@ class About extends Component {
 										</p>
 									</div>
 								</Col>
-								<Col md="4">
+								<Col md="4" style={{ paddingRight: "15px", paddingLeft: "15px" }}>
 									<div className="info">
 										<div className="icon icon-success">
 											<i className="material-icons">verified_user</i>
@@ -88,7 +88,7 @@ class About extends Component {
 									</div>
 								</Col>
 
-								<Col md="4">
+								<Col md="4" style={{ paddingRight: "15px", paddingLeft: "15px" }}>
 									<div className="info">
 										<div className="icon icon-danger">
 											<i className="material-icons">money_off</i>

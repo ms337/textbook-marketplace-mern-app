@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
 	Row,
 	Col,
@@ -49,13 +49,15 @@ class BooksList extends Component {
 
 		const rowUnit = books.length / 4;
 		console.log(rowUnit);
-		const bookLayout = books.map(({ _id, name, author, imageURL }) => (
+		const bookLayout = books.map(({ _id, name, author, price, imageURL }) => (
 			<Col lg="3" md="4" sm="4" xs="6">
 				<Card className="m-2">
 					{/*Need to control size of image*/}
-					<CardImg width="100%" src={imageURL} />
-					<CardBody>
-						<CardTitle>{name}</CardTitle>
+					<Container style={{ padding: "10% 10% 2% 10%" }}>
+						<CardImg style={{ borderRadius: "0" }} width="100%" src={imageURL} />
+					</Container>
+					<CardBody style={{ padding: "2.5% 12.5%" }}>
+						<CardTitle>{"$" + price.$numberDecimal + " CDN"}</CardTitle>
 						<CardSubtitle>{author}</CardSubtitle>
 					</CardBody>
 
@@ -66,36 +68,25 @@ class BooksList extends Component {
 
 		return (
 			//make search bar here using forms and then bind to this button
-			<div>
-				<Container>
-					{/* <br />
-				<CardColumns>
-					<TransitionGroup className="books-list">
-						{books.map(({ _id, name, author }) => (
-							<CSSTransition key={_id} timeout={500} classNames="fade">
-								<Card>
-									<CardTitle>{name}</CardTitle>
-									<br />
-									<CardSubtitle>{author}</CardSubtitle>
-									<br />
-									<CardText>{_id}</CardText>
-								</Card>
-							</CSSTransition>
-						))}
-					</TransitionGroup>
-				</CardColumns> */}
 
-					<Row>
-						<Col lg="3" md="4" sm="4" xs="6">
-							<Button>Filter</Button>
-						</Col>
-					</Row>
-
+			<Fragment>
+				<div>
+					<h3>Search Results: </h3>
+				</div>
+				<div>
 					<Container>
-						<Row>{bookLayout}</Row>
+						<Row>
+							<Col lg="3" md="4" sm="4" xs="6">
+								<Button>Filter</Button>
+							</Col>
+						</Row>
+
+						<Container>
+							<Row>{bookLayout}</Row>
+						</Container>
 					</Container>
-				</Container>
-			</div>
+				</div>
+			</Fragment>
 		);
 	}
 }

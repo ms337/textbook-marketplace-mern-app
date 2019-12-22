@@ -92,15 +92,20 @@ class BookModal extends Component {
 					<ModalBody>
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
-								<Label for="book">Book</Label>
-								<br></br>
-								<Input type="text" name="name" placeholder="Add book name" onChange={this.onChange} />
-								<br></br>
+								<Label for="book">Title</Label>
+								<Input type="text" name="name" placeholder="Add book title" onChange={this.onChange} />
+								<Label for="book">Author</Label>
 								<Input type="text" name="author" placeholder="Add book author" onChange={this.onChange} />
-								<br></br>
+								<Label for="book">Price</Label>
 								<Input type="text" name="price" placeholder="Add book price" onChange={this.onChange} />
-								<br></br>
-								<Input type="file" name="file" placeholder="Upload an Image" onChange={this.fileSelectHandler} />
+								<Label for="book">Image</Label>
+								<Input
+									style={{ color: "black" }}
+									type="file"
+									name="file"
+									placeholder="Upload an Image"
+									onChange={this.fileSelectHandler}
+								/>
 								<Button color="primary" style={{ marginTop: "2rem" }} block>
 									Create Listing
 								</Button>

@@ -75,7 +75,10 @@ class Header extends Component {
 								<br></br>
 								<br></br>
 
-								<h1 className="title" style={{ fontWeight: "400", fontSize: "60px", textAlign: "left" }}>
+								<h1
+									className="title"
+									style={{ color: "white", fontWeight: "400", fontSize: "60px", textAlign: "left" }}
+								>
 									Personalized Textbook Trading.
 								</h1>
 								<h1 style={{ fontWeight: "200", fontSize: "40px", textAlign: "left" }}>For students, by students.</h1>

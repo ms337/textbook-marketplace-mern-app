@@ -33,6 +33,8 @@ function App() {
 						<BooksList />
 					</div>
 				</Container>
+				<Row className="mb-5"></Row>
+				<Row className="mb-5"></Row>
 				<Footer />
 			</div>
 		</Provider>
