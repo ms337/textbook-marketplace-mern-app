@@ -125,6 +125,9 @@ class ChatModal extends Component {
 				<Button onClick={() => this.selectMessage({ _id, messageArray, fromName })}>Message</Button>
 			</ListGroupItem>
 		));
+		// const messagesForShowing = messages.map(({messageArray, fromName}) => (
+
+		// ));
 		return (
 			<div>
 				<Fragment>
@@ -144,7 +147,6 @@ class ChatModal extends Component {
 					<ModalBody>
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
-								{messagesList}
 								<Input type="text" name="message" placeholder="Type a message..." onChange={this.onChange} />
 								<Button color="dark" style={{ marginTop: "2rem" }} inline>
 									Send
