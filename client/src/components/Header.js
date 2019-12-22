@@ -44,6 +44,7 @@ class Header extends Component {
 		return (
 			//make search bar here using forms and then bind to this button
 			<Fragment>
+				{/* <div className=header></div> */}
 				<Container>
 					<InputGroup>
 						<Input

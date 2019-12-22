@@ -65,4 +65,4 @@ setInterval(() => {
 	console.log("Removing unconfirmed users");
 	// User.deleteMany({ confirmed: false, createdAt: mdq.beforeLastDay() });
 	User.deleteMany({ confirmed: false });
-}, 600000);
+}, 3600000);

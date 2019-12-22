@@ -5,7 +5,7 @@ import BookModal from "./components/BookModal";
 import Header from "./components/Header";
 
 import { Container, Row, Col } from "reactstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import { Provider } from "react-redux";
@@ -22,10 +22,10 @@ function App() {
 		<Provider store={store}>
 			<div className="App">
 				<AppNavbar />
+				<Header />
+
 				<Container>
-					<Row className="mb-5">
-						<Header />
-					</Row>
+					<Row className="mb-5"></Row>
 
 					<div>
 						<BooksList />
