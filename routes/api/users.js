@@ -11,6 +11,19 @@ const router = express.Router();
 
 const User = require("../../models/User");
 const Book = require("../../models/Book");
+const Verification = require("../../models/Verification");
+
+//Nodemailer
+const nodemailer = require("nodemailer");
+const email = config.get("gmailId");
+const gPassword = config.get("gmailPassword");
+const transporter = nodemailer.createTransport({
+	service: "Gmail",
+	auth: {
+		user: email,
+		pass: gPassword
+	}
+});
 
 //Registering New Users
 //@route GET api/users
@@ -35,7 +48,7 @@ router.post("/", (req, res) => {
 
 	//Check for existing user
 	User.findOne({ email }).then(user => {
-		if (user) return res.status(400).json({ message: "User already exists" });
+		if (user) return res.status(400).json({ message: "A user account with the email already exists." });
 
 		const newUser = new User({
 			name,
@@ -51,17 +64,45 @@ router.post("/", (req, res) => {
 				newUser.password = hash; //save password as hash
 				newUser.save().then(user => {
 					//payload can be anything, *****
-					jwt.sign({ id: user.id }, config.get("jwtSecret"), { expiresIn: 7200 }, (err, token) => {
-						if (err) throw err;
-						res.json({
-							token, //same as token = token
-							user: {
-								id: user.id,
-								name: user.name,
-								email: user.email
-							}
-						});
-					});
+
+					jwt.sign(
+						{
+							user: user.id
+						},
+						config.get("emailJWTSecret"),
+						{
+							expiresIn: "1d"
+						},
+						(err, emailToken) => {
+							if (err) return res.status(400).json({ message: "Verification token could not be created." });
+							const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
+							let newVerificationObj = new Verification({
+								token: emailToken,
+								userId: user.id
+							});
+							newVerificationObj.save().catch(err => {
+								res
+									.status(404)
+									.json({ success: false, message: "Could not save verification object to DB, backend problem." });
+							});
+
+							transporter.sendMail(
+								{
+									to: user.email,
+									subject: "Confirm you TexChange Account Registration",
+									html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`
+								},
+								(err, res) => {
+									if (err) {
+										console.log(err);
+										res.status(400).json({ message: "Could not send verification email." });
+									} else {
+										res.json({ success: true, message: "Check you email for verification." });
+									}
+								}
+							);
+						}
+					);
 				});
 			});
 		});

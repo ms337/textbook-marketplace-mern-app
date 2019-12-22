@@ -2,17 +2,18 @@
 	"name": "textapp",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "server.js",
 	"scripts": {
 		"client-install": "npm install --prefix client",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node server.js",
 		"server": "nodemon server.js",
 		"client": "npm start --prefix client",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Madhav Singhal",
 	"license": "ISC",
 	"dependencies": {
 		"bcrypt": "^3.0.6",
@@ -21,9 +22,11 @@
 		"config": "^3.2.4",
 		"express": "^4.17.1",
 		"jsonwebtoken": "^8.5.1",
+		"mongo-date-query": "^1.2.2",
 		"mongoose": "^5.7.8",
 		"multer": "^1.4.2",
 		"multer-storage-cloudinary": "^2.2.1",
+		"nodemailer": "^6.4.2",
 		"socket.io": "^2.3.0"
 	},
 	"devDependencies": {
