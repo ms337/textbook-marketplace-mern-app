@@ -51,7 +51,7 @@ class BooksList extends Component {
 
 		const rowUnit = books.length / 4;
 		console.log(rowUnit);
-		const bookLayout = books.map(({ _id, name, author, price, imageURL, courses, quality, seller }) => (
+		const bookLayout = books.map(({ _id, name, author, price, edition, imageURL, courses, quality, seller }) => (
 			<Col lg="3" md="4" sm="4" xs="6">
 				<BookView
 					key={_id}
@@ -59,6 +59,7 @@ class BooksList extends Component {
 					author={author}
 					price={price}
 					imageURL={imageURL}
+					edition={edition}
 					courses={courses}
 					quality={quality}
 					seller={seller}
