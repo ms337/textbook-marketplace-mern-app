@@ -108,7 +108,15 @@ class About extends Component {
 		);
 		return (
 			//make search bar here using forms and then bind to this button
-			<Fragment>{books.length === 0 ? aboutSection : null}</Fragment>
+			<Fragment>
+				{books.length === 0 ? (
+					aboutSection
+				) : (
+					<div>
+						<h3>Search Results: </h3>
+					</div>
+				)}
+			</Fragment>
 		);
 	}
 }

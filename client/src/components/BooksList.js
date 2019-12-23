@@ -23,6 +23,8 @@ import { getBooks, deleteBook } from "../actions/bookActions"; //import action
 
 import PropTypes from "prop-types";
 
+import BookView from "./BookView";
+
 class BooksList extends Component {
 	static propTypes = {
 		//action from redux is store as a prop
@@ -49,20 +51,18 @@ class BooksList extends Component {
 
 		const rowUnit = books.length / 4;
 		console.log(rowUnit);
-		const bookLayout = books.map(({ _id, name, author, price, imageURL }) => (
+		const bookLayout = books.map(({ _id, name, author, price, imageURL, courses, quality, seller }) => (
 			<Col lg="3" md="4" sm="4" xs="6">
-				<Card className="m-2">
-					{/*Need to control size of image*/}
-					<Container style={{ padding: "10% 10% 2% 10%" }}>
-						<CardImg style={{ borderRadius: "0" }} width="100%" src={imageURL} />
-					</Container>
-					<CardBody style={{ padding: "2.5% 12.5%" }}>
-						<CardTitle>{"$" + price.$numberDecimal + " CDN"}</CardTitle>
-						<CardSubtitle>{author}</CardSubtitle>
-					</CardBody>
-
-					{/* <CardText>{_id}</CardText> */}
-				</Card>
+				<BookView
+					key={_id}
+					name={name}
+					author={author}
+					price={price}
+					imageURL={imageURL}
+					courses={courses}
+					quality={quality}
+					seller={seller}
+				/>
 			</Col>
 		));
 
@@ -71,15 +71,12 @@ class BooksList extends Component {
 
 			<Fragment>
 				<div>
-					<h3>Search Results: </h3>
-				</div>
-				<div>
 					<Container>
-						<Row>
+						{/* <Row>
 							<Col lg="3" md="4" sm="4" xs="6">
 								<Button>Filter</Button>
 							</Col>
-						</Row>
+						</Row> */}
 
 						<Container>
 							<Row>{bookLayout}</Row>

@@ -5,7 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 // styles
-// import "./assets/css/bootstrap.min.css";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/now-ui-kit.css";
 
