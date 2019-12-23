@@ -1,20 +1,5 @@
 import React, { Component, Fragment } from "react";
-import {
-	Row,
-	Col,
-	Container,
-	ListGroup,
-	ListGroupItem,
-	Card,
-	Button,
-	CardImg,
-	CardTitle,
-	CardText,
-	CardGroup,
-	CardColumns,
-	CardSubtitle,
-	CardBody
-} from "reactstrap";
+import { Row, Col, Container } from "reactstrap";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
