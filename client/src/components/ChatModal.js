@@ -140,6 +140,10 @@ class ChatModal extends Component {
 				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					<ModalHeader toggle={this.toggle}>Inbox</ModalHeader>
 					<ModalBody>
+						<p>
+							We are currently rapidly fixing bugs, and adding functionality. Please message us on Facebook if something
+							is going terribly wrong, and we will try to fix it immediately. Thanks!
+						</p>
 						{messagesList.length == 0
 							? "You don’t have any messages, check back here once you start buying and selling books to start saving!"
 							: messagesList}

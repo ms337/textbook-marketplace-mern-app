@@ -25,7 +25,7 @@ router.post("/", (req, res) => {
 
 	//Check for existing user
 	User.findOne({ email }).then(user => {
-		if (!user) return res.status(400).json({ message: "User does not exist" });
+		if (!user) return res.status(400).json({ message: "User does not exist." });
 
 		if (!user.confirmed) {
 			return res.status(400).json({ message: "Email needs to be verified before logging in." });
