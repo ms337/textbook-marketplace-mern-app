@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import BooksList from "./BooksList";
 import {
 	Row,
 	Col,
@@ -109,12 +110,13 @@ class About extends Component {
 		return (
 			//make search bar here using forms and then bind to this button
 			<Fragment>
-				{books.length === 0 ? (
-					aboutSection
-				) : (
+				{this.props.book.searchOnce ? (
 					<div>
 						<h3>Search Results: </h3>
+						<BooksList />
 					</div>
+				) : (
+					aboutSection
 				)}
 			</Fragment>
 		);

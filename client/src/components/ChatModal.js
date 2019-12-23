@@ -139,7 +139,11 @@ class ChatModal extends Component {
 				{/* Modal takes properties inside depicting its component state */}
 				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					<ModalHeader toggle={this.toggle}>Inbox</ModalHeader>
-					<ModalBody>{messagesList.length == 0 ? "You have no messages." : messagesList}</ModalBody>
+					<ModalBody>
+						{messagesList.length == 0
+							? "You don’t have any messages, check back here once you start buying and selling books to start saving!"
+							: messagesList}
+					</ModalBody>
 				</Modal>
 
 				<Modal isOpen={this.state.messageSelectedBool} toggle={this.closeMessageForm}>

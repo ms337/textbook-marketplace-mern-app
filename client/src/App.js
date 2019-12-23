@@ -29,9 +29,6 @@ function App() {
 				<Container>
 					<Row className="mb-5"></Row>
 					<About />
-					<div>
-						<BooksList />
-					</div>
 				</Container>
 				<Row className="mb-5"></Row>
 				<Row className="mb-5"></Row>

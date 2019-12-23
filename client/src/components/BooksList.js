@@ -79,7 +79,11 @@ class BooksList extends Component {
 						</Row> */}
 
 						<Container>
-							<Row>{bookLayout}</Row>
+							<Row>
+								{books.length == 0
+									? "Sorry! No textbooks have been posted matching this search. Please edit your search to find more books or try searching without any parameters to get all books available!"
+									: bookLayout}
+							</Row>
 						</Container>
 					</Container>
 				</div>

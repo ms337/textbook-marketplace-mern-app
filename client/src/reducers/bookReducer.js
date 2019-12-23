@@ -2,7 +2,8 @@ import { GET_BOOKS, ADD_BOOK, DELETE_BOOK, BOOKS_LOADING } from "../actions/type
 
 const initialState = {
 	books: [],
-	loading: false //need to b/c data could take time time, once request is made, set to true
+	loading: false,
+	searchOnce: false //need to b/c data could take time time, once request is made, set to true
 };
 
 //action will have a type
@@ -13,7 +14,8 @@ export default function(state = initialState, action) {
 			return {
 				...state, //copying the state
 				books: action.payload, //adding items to this copy
-				loading: false //set loading back
+				loading: false,
+				searchOnce: true //set loading back
 			};
 
 		//can access payloads through action.payload

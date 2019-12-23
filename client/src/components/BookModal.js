@@ -15,8 +15,9 @@ class BookModal extends Component {
 		modal: false,
 		name: "",
 		author: "",
-		courses: ["CS", "PHIL"],
+		courses: [],
 		price: 0,
+		edition: "",
 		quality: -1,
 		seller: 0,
 		file: ""
@@ -64,7 +65,7 @@ class BookModal extends Component {
 		let form = new FormData();
 		form.append("name", this.state.name);
 		form.append("author", this.state.author);
-		form.append("courses", ["CS", "PHIL"]);
+		form.append("courses", this.state.courses);
 		form.append("price", this.state.price);
 		form.append("quality", this.state.quality);
 		form.append("file", this.state.file);
@@ -93,11 +94,27 @@ class BookModal extends Component {
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="book">Title</Label>
-								<Input type="text" name="name" placeholder="Add book title" onChange={this.onChange} />
+								<Input type="text" name="name" placeholder="Add book title" onChange={this.onChange} required />
 								<Label for="book">Author</Label>
-								<Input type="text" name="author" placeholder="Add book author" onChange={this.onChange} />
+								<Input type="text" name="author" placeholder="Add book author" onChange={this.onChange} required />
 								<Label for="book">Price</Label>
-								<Input type="text" name="price" placeholder="Add book price" onChange={this.onChange} />
+								<Input type="text" name="price" placeholder="Add book price" onChange={this.onChange} required />
+								<Label for="book">Edition</Label>
+								<Input
+									type="text"
+									name="edition"
+									placeholder="Add edition of the book"
+									onChange={this.onChange}
+									required
+								/>
+								<Label for="book">Quality</Label>
+								<Input
+									type="number"
+									name="quality"
+									placeholder="Rate the condition of the book from 0 (bad) to 5 (excellent)"
+									onChange={this.onChange}
+									required
+								/>
 								<Label for="book">Image</Label>
 								<Input
 									style={{ color: "black" }}
@@ -105,6 +122,7 @@ class BookModal extends Component {
 									name="file"
 									placeholder="Upload an Image"
 									onChange={this.fileSelectHandler}
+									required
 								/>
 								<Button color="primary" style={{ marginTop: "2rem" }} block>
 									Create Listing
