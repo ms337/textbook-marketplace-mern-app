@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 
 import thunk from "redux-thunk";
 
@@ -11,7 +12,7 @@ const middleware = [thunk]; //any middleware we use will be inside this array
 const store = createStore(
 	rootReducer,
 	initialState,
-	compose(
+	composeWithDevTools(
 		applyMiddleware(...middleware),
 		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({ trace: true })
 	)
