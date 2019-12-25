@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 
 import thunk from "redux-thunk";
 
@@ -8,17 +9,26 @@ const initialState = {};
 
 const middleware = [thunk]; //any middleware we use will be inside this array
 
-if (process.env.NODE_ENV === "production") {
-	store = createStore(rootReducer, initialState, compose(applyMiddleware(...middleware)));
-} else {
-	store = createStore(
-		rootReducer,
-		initialState,
-		compose(
-			applyMiddleware(...middleware),
-			window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-		)
-	);
-}
+const composeEnhancers = composeWithDevTools({
+	// options like actionSanitizer, stateSanitizer
+});
+const store = createStore(
+	rootReducer,
+	/* preloadedState, */ composeEnhancers(
+		applyMiddleware(...middleware)
+		// other store enhancers if any
+	)
+);
+
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// const store = createStore(
+// 	rootReducer,
+// 	initialState,
+// 	compose(
+// 		applyMiddleware(...middleware),
+// 		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({ trace: true })
+// 	)
+// );
 
 export default store;
