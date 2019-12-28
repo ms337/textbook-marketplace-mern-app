@@ -50,7 +50,7 @@ class RegisterModal extends Component {
 
 	componentDidUpdate(prevProps) {
 		const { error, isAuthenticated, justRegistered } = this.props;
-		console.log(justRegistered);
+
 		if (error != prevProps.error) {
 			//Check for register error
 			if (error.id === "REGISTER_FAIL") {
@@ -64,24 +64,16 @@ class RegisterModal extends Component {
 			}
 		}
 
-		if (justRegistered != prevProps.justRegistered) {
-			this.setState({
-				goToLoginMsg: true
-			});
-		}
 		if (this.state.modal) {
-			// if (this.state.modal) {
-			// 	if (justRegistered) {
-			// 		this.setState({
-			// 			goToLoginMsg: true
-			// 		});
-			// 	}
-			// }
-
-			//If authenticated, close modal
 			if (isAuthenticated) {
 				this.toggle();
 			}
+		}
+
+		if (justRegistered != prevProps.justRegistered) {
+			this.setState({
+				goToLoginMsg: justRegistered
+			});
 		}
 	}
 
@@ -91,7 +83,8 @@ class RegisterModal extends Component {
 		this.setState({
 			//modifies state
 			modal: !this.state.modal,
-			agreedToTerms: false
+			agreedToTerms: false,
+			goToLoginMsg: false
 		});
 	};
 
@@ -106,7 +99,8 @@ class RegisterModal extends Component {
 		this.setState({
 			nestedModal: false,
 			modal: false,
-			agreedToTerms: false
+			agreedToTerms: false,
+			goToLoginMsg: false
 		});
 	};
 
@@ -153,9 +147,7 @@ class RegisterModal extends Component {
 					<ModalHeader toggle={this.toggle}>Register</ModalHeader>
 					<ModalBody>
 						{this.state.message ? <Alert color="danger">{this.state.message} </Alert> : null}
-						{this.state.goToLoginMsg ? (
-							<Alert color="success">A Verification email has been sent to your email </Alert>
-						) : null}
+						{this.state.goToLoginMsg ? <Alert color="success">"Check your email for verifiction!</Alert> : null}
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="name">Name</Label>
@@ -188,8 +180,8 @@ class RegisterModal extends Component {
 
 								<Label check style={{ paddingLeft: "25px" }}>
 									<a onClick={this.toggleNested}>
-										<Input type="checkbox" checked={this.state.agreedToTerms} required />I have read and agree to the
-										terms and conditions.
+										<Input type="checkbox" onChange="" checked={this.state.agreedToTerms} required />I have read and
+										agree to the terms and conditions.
 									</a>
 								</Label>
 								<Modal
@@ -503,7 +495,7 @@ class RegisterModal extends Component {
 									</ModalFooter>
 								</Modal>
 
-								<Button color="dark" style={{ marginTop: "2rem" }} block>
+								<Button color="primary" style={{ marginTop: "2rem" }} block>
 									Register
 								</Button>
 							</FormGroup>

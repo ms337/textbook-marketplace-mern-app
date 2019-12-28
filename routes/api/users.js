@@ -63,8 +63,6 @@ router.post("/", (req, res) => {
 				if (err) throw err; //err NEED HANDLING FUNCTIONALITY?
 				newUser.password = hash; //save password as hash
 				newUser.save().then(user => {
-					//payload can be anything, *****
-
 					jwt.sign(
 						{
 							user: user.id
@@ -92,13 +90,14 @@ router.post("/", (req, res) => {
 									subject: "Confirm you TexChange Account Registration",
 									html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`
 								},
-								(err, res) => {
+								(err, info) => {
 									if (err) {
 										console.log(err);
 										//RESPONSE OBJECT DOES NOT EXIST
 										return res.status(400).json({ message: "Could not send verification email." });
 									} else {
-										return res.json({ success: true, message: "Check you email for verification." });
+										console.log("WOOORKS");
+										res.json({ message: "Please check your email for verification." });
 									}
 								}
 							);
