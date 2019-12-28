@@ -28,7 +28,7 @@ export const loadUser = () => (dispatch, getState) => {
 		)
 		.catch(err => {
 			console.log(err);
-			// dispatch(returnErrors(err.response.data, err.response.status));
+			dispatch(returnErrors(err.response.data, err.response.status));
 			dispatch({ type: AUTH_ERROR });
 		});
 	//Any error we get we want to run it through are errorReducer
@@ -48,12 +48,13 @@ export const register = ({ name, email, password }) => dispatch => {
 
 	axios
 		.post("/api/users", body, config) //data, headers
-		.then(res =>
+		.then(res => {
+			console.log("Success");
 			dispatch({
-				type: REGISTER_SUCCESS,
-				payload: res.data //everything in the data
-			})
-		)
+				type: REGISTER_SUCCESS
+				// payload: res.data //everything in the data
+			});
+		})
 		.catch(err => {
 			console.log(err);
 			dispatch(returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")); //errors
@@ -86,6 +87,7 @@ export const login = ({ email, password }) => dispatch => {
 		)
 		.catch(err => {
 			dispatch(returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")); //errors
+			console.log(err.response.data);
 			dispatch({
 				type: LOGIN_FAIL
 			});
@@ -101,8 +103,7 @@ export const logout = () => {
 };
 //Request body
 
-//Setup config/headers and token
-
+//Setup config/headers and tokenzx
 // WHENEVER WE NEED TO SEND TOKEN TO AN ENDPOINT, WE JUST USE THIS
 export const tokenConfig = getState => {
 	const token = getState().auth.token;

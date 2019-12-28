@@ -113,7 +113,7 @@ class RegisterModal extends Component {
 	agree = () => {
 		this.setState({
 			nestedModal: !this.state.nestedModal,
-			agreedToTerms: !this.state.agreedToTerms
+			agreedToTerms: true
 		});
 	};
 

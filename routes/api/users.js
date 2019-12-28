@@ -95,9 +95,10 @@ router.post("/", (req, res) => {
 								(err, res) => {
 									if (err) {
 										console.log(err);
-										res.status(400).json({ message: "Could not send verification email." });
+										//RESPONSE OBJECT DOES NOT EXIST
+										return res.status(400).json({ message: "Could not send verification email." });
 									} else {
-										res.json({ success: true, message: "Check you email for verification." });
+										return res.json({ success: true, message: "Check you email for verification." });
 									}
 								}
 							);
