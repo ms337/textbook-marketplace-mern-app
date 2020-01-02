@@ -11,6 +11,8 @@ export const BOOKS_LOADING = "BOOKS_LOADING";
 //For authentication
 export const USER_LOADING = "USER_LOADING";
 export const USER_LOADED = "USER_LOADED";
+export const USER_DELETED = "USER_DELETED";
+export const USER_DEL_ERROR = "USER_DEL_ERROR";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";

@@ -10,7 +10,9 @@ import {
 	REGISTER_FAIL,
 	LOGOUT_SUCCESS,
 	LOGIN_SUCCESS,
-	LOGIN_FAIL
+	LOGIN_FAIL,
+	USER_DELETED,
+	USER_DEL_ERROR
 } from "../actions/types";
 
 //Check token and load user

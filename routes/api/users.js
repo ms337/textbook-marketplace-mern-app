@@ -96,7 +96,6 @@ router.post("/", (req, res) => {
 										//RESPONSE OBJECT DOES NOT EXIST
 										return res.status(400).json({ message: "Could not send verification email." });
 									} else {
-										console.log("WOOORKS");
 										res.json({ message: "Please check your email for verification." });
 									}
 								}
@@ -173,4 +172,26 @@ router.put("/:id", auth, (req, res) => {
 	}
 });
 
+router.get("", auth, (req, res) => {
+	User.findById(req.user.id)
+		.select("-password")
+		.then(user => {
+			// console.log("HIT");
+			// console.log(user);
+			res.json(user);
+		});
+});
+
+router.delete("/", auth, (req, res) => {
+	User.findById(req.user.id) //gives promise back
+		.then(user =>
+			user
+				.remove()
+				.catch(err => {
+					console.log(err);
+					res.status(404).json({ success: false });
+				})
+				.then(() => res.json({ success: true }))
+		);
+});
 module.exports = router;

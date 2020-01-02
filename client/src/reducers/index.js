@@ -3,6 +3,7 @@ import bookReducer from "./bookReducer";
 import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import chatReducer from "./chatReducer";
+import profileReducer from "./profileReducer";
 
 // import authReducer from './authReducer'; import separte reducers for the different resources
 
@@ -11,5 +12,6 @@ export default combineReducers({
 	book: bookReducer,
 	auth: authReducer,
 	error: errorReducer,
-	chat: chatReducer
+	chat: chatReducer,
+	profile: profileReducer
 });

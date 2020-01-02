@@ -6,11 +6,13 @@ import LoginModal from "./auth/LoginModal";
 import Logout from "./auth/Logout";
 import BookModal from "./BookModal";
 import ChatModal from "./ChatModal";
+import ProfileModal from "./Profile";
 
 import { connect } from "react-redux"; //import connect to connect this component to state
 import PropTypes from "prop-types";
 
 import logo from "../assets/logo.png";
+import Profile from "./Profile";
 
 class AppNavbar extends Component {
 	state = {
@@ -39,6 +41,9 @@ class AppNavbar extends Component {
 				</NavItem>
 				<NavItem>
 					<ChatModal />
+				</NavItem>
+				<NavItem>
+					<ProfileModal />
 				</NavItem>
 				<NavItem>
 					<Logout />
