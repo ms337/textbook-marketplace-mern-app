@@ -87,22 +87,26 @@ router.post("/", (req, res) => {
 								},
 								(err, info) => {
 									if (err) {
+										console.log("BACKEND FAIL: NOT SENDING VERIFICTION EMAIL!");
 										console.log(err);
 										return res.status(400).json({ message: "Could not send verification email." });
+									} else {
+										newVerificationObj
+											.save()
+											.then(() => {
+												res.json({ message: "Please check your email for verification." });
+											})
+											.catch(err => {
+												res
+													.status(404)
+													.json({
+														success: false,
+														message: "Could not save verification object to DB, backend problem."
+													});
+											});
 									}
 								}
 							);
-
-							newVerificationObj
-								.save()
-								.then(() => {
-									res.json({ message: "Please check your email for verification." });
-								})
-								.catch(err => {
-									res
-										.status(404)
-										.json({ success: false, message: "Could not save verification object to DB, backend problem." });
-								});
 						}
 					);
 				});
