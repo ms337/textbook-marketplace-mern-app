@@ -2,6 +2,7 @@
 	"mongoURI": "mongodb+srv://madhav:candice69@textapp-eerpz.mongodb.net/test?retryWrites=true&w=majority",
 	"jwtSecret": "mav_TextApp",
 	"emailJWTSecret": "email_TextApp",
-	"gmailId": "texchangeuwo@gmail.com",
-	"gmailPassword": "hdkfu75GH156!kg"
+	"sendGridEmail": "msinghal@uwo.ca",
+	"sendGridPass": "Texchange@337",
+	"sendGridUserName": "ms337"
 }

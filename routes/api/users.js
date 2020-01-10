@@ -15,13 +15,21 @@ const Verification = require("../../models/Verification");
 
 //Nodemailer
 const nodemailer = require("nodemailer");
-const email = config.get("gmailId");
-const gPassword = config.get("gmailPassword");
-const transporter = nodemailer.createTransport({
-	service: "Gmail",
+const email = config.get("sendGridEmail");
+const userName = config.get("sendGridUserName");
+const password = config.get("sendGridPass");
+
+const options = {
 	auth: {
-		user: email,
-		pass: gPassword
+		api_user: "ms337",
+		api_password: password
+	}
+};
+const transporter = nodemailer.createTransport({
+	service: "SendGrid",
+	auth: {
+		user: userName,
+		pass: password
 	}
 });
 
@@ -97,12 +105,10 @@ router.post("/", (req, res) => {
 												res.json({ message: "Please check your email for verification." });
 											})
 											.catch(err => {
-												res
-													.status(404)
-													.json({
-														success: false,
-														message: "Could not save verification object to DB, backend problem."
-													});
+												res.status(404).json({
+													success: false,
+													message: "Could not save verification object to DB, backend problem."
+												});
 											});
 									}
 								}
