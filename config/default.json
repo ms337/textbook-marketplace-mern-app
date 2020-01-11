@@ -4,5 +4,7 @@
 	"emailJWTSecret": "email_TextApp",
 	"sendGridEmail": "msinghal@uwo.ca",
 	"sendGridPass": "Texchange@337",
-	"sendGridUserName": "ms337"
+	"sendGridUserName": "ms337",
+	"gmailEmail": "texchangeuwo@gmail.com",
+	"gmailPassword": "hdkfu75GH156!kg"
 }

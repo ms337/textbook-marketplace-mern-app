@@ -15,20 +15,14 @@ const Verification = require("../../models/Verification");
 
 //Nodemailer
 const nodemailer = require("nodemailer");
-const email = config.get("sendGridEmail");
-const userName = config.get("sendGridUserName");
-const password = config.get("sendGridPass");
+const email = config.get("gmailEmail");
+// const userName = config.get("sendGridUserName");
+const password = config.get("gmailPassword");
 
-const options = {
-	auth: {
-		api_user: "ms337",
-		api_password: password
-	}
-};
 const transporter = nodemailer.createTransport({
-	service: "SendGrid",
+	service: "Gmail",
 	auth: {
-		user: userName,
+		user: email,
 		pass: password
 	}
 });
