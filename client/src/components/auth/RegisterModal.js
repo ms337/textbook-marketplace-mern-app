@@ -147,7 +147,9 @@ class RegisterModal extends Component {
 					<ModalHeader toggle={this.toggle}>Register</ModalHeader>
 					<ModalBody>
 						{this.state.message ? <Alert color="danger">{this.state.message} </Alert> : null}
-						{this.state.goToLoginMsg ? <Alert color="success">Check your email for verification!</Alert> : null}
+						{this.state.goToLoginMsg ? (
+							<Alert color="success">Check your email for verification! Link is valid for 24hrs.</Alert>
+						) : null}
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
 								<Label for="name">Name</Label>

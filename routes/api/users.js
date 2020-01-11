@@ -56,8 +56,13 @@ router.post("/", (req, res) => {
 
 	//Check for existing user
 	User.findOne({ email }).then(user => {
-		if (user) return res.status(400).json({ message: "A user account with the email already exists." });
-
+		if (user) {
+			if (!user.confirmed) {
+				return res.status(400).json({ message: "An account with this email exists and needs to be verified." });
+			} else {
+				return res.status(409).json({ message: "A user account with the email already exists." });
+			}
+		}
 		const newUser = new User({
 			name,
 			email,
