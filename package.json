@@ -22,6 +22,8 @@
 		"concurrently": "^5.0.0",
 		"config": "^3.2.4",
 		"express": "^4.17.1",
+		"google-auth-library": "^5.9.2",
+		"googleapis": "^47.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"mongo-date-query": "^1.2.2",
 		"mongoose": "^5.7.8",

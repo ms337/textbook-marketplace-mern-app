@@ -40,9 +40,7 @@ const parser = multer({ storage: storage });
 //NEEEEED TO PUT BACK auth middle argument
 router.get("/", (req, res) => {
 	if (req.query.search) {
-		// escapeRegex(req.query.search);
 		const regex = new RegExp(escapeRegex(req.query.search), "gi"); //gi are flags
-
 		Book.find({ $or: [{ name: regex }, { author: regex }] }).then(books => res.json(books));
 	} else {
 		Book.find().then(books => res.json(books));
