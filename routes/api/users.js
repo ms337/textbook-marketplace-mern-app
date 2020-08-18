@@ -13,24 +13,6 @@ const User = require("../../models/User");
 const Book = require("../../models/Book");
 const Verification = require("../../models/Verification");
 
-//Gmail OAuth
-const { google } = require("googleapis");
-
-const OAuth2 = google.auth.OAuth2;
-
-const oauth2Client = new OAuth2(
-	"971000855493-rhmtavd9e85p964debhfnfqgi76tc8ha.apps.googleusercontent.com", //
-	"nfqJgT8hXNa0o1fV-RLrJB_F", //
-	"https://developers.google.com/oauthplayground" // Redirect URL
-);
-
-oauth2Client.setCredentials({
-	refresh_token:
-		"1//04Y9j99g8Z2wtCgYIARAAGAQSNwF-L9IrohFuXb4UPO2wIefpQXsGGRGIQRDLOQtDmaBLiTxzadLKPe0WcqvOOHy4sJkV-Uyc-XM"
-});
-
-const accessToken = oauth2Client.getAccessToken();
-
 //Nodemailer
 const nodemailer = require("nodemailer");
 const email = config.get("gmailEmail");
@@ -40,13 +22,8 @@ const password = config.get("gmailPassword");
 const transporter = nodemailer.createTransport({
 	service: "Gmail",
 	auth: {
-		type: "OAuth2",
-		user: "texchangeuwo@gmail.com",
-		clientId: "971000855493-rhmtavd9e85p964debhfnfqgi76tc8ha.apps.googleusercontent.com",
-		clientSecret: "nfqJgT8hXNa0o1fV-RLrJB_F",
-		refreshToken:
-			"1//04Y9j99g8Z2wtCgYIARAAGAQSNwF-L9IrohFuXb4UPO2wIefpQXsGGRGIQRDLOQtDmaBLiTxzadLKPe0WcqvOOHy4sJkV-Uyc-XM",
-		accessToken: accessToken
+		user: email,
+		pass: password
 	}
 });
 
