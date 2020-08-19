@@ -11,7 +11,7 @@ import {
 	ListGroupItem,
 	Button,
 	Row,
-	Col
+	Col,
 } from "reactstrap";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -25,17 +25,21 @@ class Header extends Component {
 	static propTypes = {
 		//action from redux is store as a prop
 		getBooks: PropTypes.func.isRequired,
-		book: PropTypes.object.isRequired //represent a state
+		book: PropTypes.object.isRequired, //represent a state
 	};
 
-	//Lifecycle method: api requests, actions happen here
-	// componentDidMount() {
-	// 	// this.props.getBooks();
-	// }
+	//TODO; Need to capture state of input and then pass it to onListBooksClick
 
-	onListBooksClick = search => {
+	onListBooksClick = (search) => {
+		console.log(search);
 		this.props.getBooks(search);
 	};
+
+	handleKeyPress(event) {
+		if (event.key === "Enter") {
+			this.onListBooksClick(event.target.value);
+		}
+	}
 
 	// onDeleteClick = id => {
 	// 	this.props.deleteBook(id);
@@ -66,7 +70,7 @@ class Header extends Component {
 					<div
 						className="page-header-image"
 						style={{
-							backgroundImage: "url(" + require("../assets/bg.jpg") + ")"
+							backgroundImage: "url(" + require("../assets/bg.jpg") + ")",
 						}}
 					></div>
 					<Container>
@@ -99,6 +103,7 @@ class Header extends Component {
 												id="searchQuery"
 												placeholder="Search for textbooks here..."
 												style={{ color: "black", borderRadius: "0.5rem 0rem 0rem O.5rem" }}
+												onKeyPress={this.handleKeyPress.bind(this)} //added support for pressing enterkey
 											/>
 											<InputGroupAddon addonType="append">
 												<Button
@@ -108,7 +113,7 @@ class Header extends Component {
 														margin: "0rem",
 														border: "1px solid",
 														borderColor: "#680383",
-														borderRadius: "0rem 0.5rem O.5rem 0rem"
+														borderRadius: "0rem 0.5rem O.5rem 0rem",
 													}}
 													onClick={this.onListBooksClick.bind(this)}
 												>
@@ -127,9 +132,9 @@ class Header extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	//root reducer key for this componentsReducer or is it the value
-	book: state.book
+	book: state.book,
 });
 
 //mapping function, {actions to be executed},, component name

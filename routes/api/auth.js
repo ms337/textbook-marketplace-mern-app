@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
 	}
 
 	//Check for existing user
-	User.findOne({ email }).then(user => {
+	User.findOne({ email }).then((user) => {
 		if (!user) return res.status(400).json({ message: "User does not exist." });
 
 		if (!user.confirmed) {
@@ -33,7 +33,7 @@ router.post("/", (req, res) => {
 		//Compare email and password
 		//Validate password
 
-		bcrypt.compare(password, user.password).then(isMatch => {
+		bcrypt.compare(password, user.password).then((isMatch) => {
 			//incorrect login
 			if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
@@ -44,8 +44,8 @@ router.post("/", (req, res) => {
 					user: {
 						id: user.id,
 						name: user.name,
-						email: user.email
-					}
+						email: user.email,
+					},
 				});
 			});
 		});
@@ -59,7 +59,7 @@ router.post("/", (req, res) => {
 router.get("/user", auth, (req, res) => {
 	User.findById(req.user.id)
 		.select("-password")
-		.then(user => {
+		.then((user) => {
 			// console.log("HIT");
 			// console.log(user);
 			res.json(user);

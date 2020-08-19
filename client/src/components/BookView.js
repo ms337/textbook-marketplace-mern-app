@@ -13,7 +13,7 @@ import {
 	CardGroup,
 	CardColumns,
 	CardSubtitle,
-	CardBody
+	CardBody,
 } from "reactstrap";
 
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, NavLink, Alert } from "reactstrap";
@@ -23,20 +23,22 @@ import { getBooks, deleteBook } from "../actions/bookActions"; //import action
 
 import PropTypes from "prop-types";
 
+const qualityDict = { 1: "Okay", 2: "Used", 3: "Lightly Used", 4: "Almost New", 5: "As Good As New" };
+
 class BookView extends Component {
 	static propTypes = {
 		//action from redux is store as a prop
 
-		book: PropTypes.object.isRequired //represent a state
+		book: PropTypes.object.isRequired, //represent a state
 	};
 
 	state = {
-		modal: false
+		modal: false,
 	};
 
 	toggle = () => {
 		this.setState({
-			modal: !this.state.modal
+			modal: !this.state.modal,
 		});
 		// console.log(this.state.modal);
 	};
@@ -45,12 +47,6 @@ class BookView extends Component {
 		//book represent our entire state object, books represents the array
 		console.log(this.state.modal);
 		const { name, author, price, imageURL, edition, courses, quality, seller } = this.props;
-
-		function getQuality(val) {
-			if (val === 1) {
-				return "High Quality.";
-			}
-		}
 
 		return (
 			//make search bar here using forms and then bind to this button
@@ -62,8 +58,9 @@ class BookView extends Component {
 					</Container>
 					<CardBody style={{ padding: "2.5% 12.5%" }}>
 						<CardTitle>{"$" + price.$numberDecimal + " CDN"}</CardTitle>
-						<CardSubtitle>{name}</CardSubtitle>
+						<CardSubtitle>{name + ", " + edition}</CardSubtitle>
 						<p style={{ fontSize: "0.75rem" }}>{author}</p>
+						<h6>{qualityDict[quality]}</h6>
 					</CardBody>
 
 					{/* <CardText>{_id}</CardText> */}
@@ -81,7 +78,7 @@ class BookView extends Component {
 							<h4>{"$" + price.$numberDecimal + " CDN"}</h4>
 							<h5>{edition}</h5>
 							<h5>{courses}</h5>
-							<h5>{quality}</h5>
+							<h6>{qualityDict[quality]}</h6>
 						</Container>
 					</ModalBody>
 				</Modal>
@@ -90,9 +87,9 @@ class BookView extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	//root reducer key for this componentsReducer or is it the value
-	book: state.book
+	book: state.book,
 });
 
 //mapping function, {actions to be executed},, component name

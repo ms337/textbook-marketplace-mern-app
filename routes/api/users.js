@@ -16,15 +16,14 @@ const Verification = require("../../models/Verification");
 //Nodemailer
 const nodemailer = require("nodemailer");
 const email = config.get("gmailEmail");
-// const userName = config.get("sendGridUserName");
 const password = config.get("gmailPassword");
 
 const transporter = nodemailer.createTransport({
 	service: "Gmail",
 	auth: {
 		user: email,
-		pass: password
-	}
+		pass: password,
+	},
 });
 
 //Registering New Users
@@ -49,69 +48,77 @@ router.post("/", (req, res) => {
 	}
 
 	//Check for existing user
-	User.findOne({ email }).then(user => {
+	User.findOne({ email }).then((user) => {
 		if (user) return res.status(400).json({ message: "A user account with the email already exists." });
 
 		const newUser = new User({
 			name,
 			email,
 			password,
-			confirmed: false
+			confirmed: false,
 		});
 
-		//Create salt & hash
-		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(newUser.password, salt, (err, hash) => {
-				if (err) throw err; //err NEED HANDLING FUNCTIONALITY?
-				newUser.password = hash; //save password as hash
-				newUser.save().then(user => {
-					jwt.sign(
-						{
-							user: user.id
-						},
-						config.get("emailJWTSecret"),
-						{
-							expiresIn: "1d"
-						},
-						(err, emailToken) => {
-							if (err) return res.status(400).json({ message: "Verification token could not be created." });
-							const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
-							let newVerificationObj = new Verification({
-								token: emailToken,
-								userId: user.id
-							});
+		try {
+			//Create salt & hash
+			bcrypt.genSalt(10, (err, salt) => {
+				bcrypt.hash(newUser.password, salt, (err, hash) => {
+					if (err) throw err;
+					newUser.password = hash; //save password as hash
+					// bcrypt.hash(newUser.email, salt, (err, hash) => {
+					// 	if (err) throw err;
+					// newUser.email = hash; // hash email too if needed?
+					newUser.save().then((user) => {
+						jwt.sign(
+							{
+								user: user.id,
+							},
+							config.get("emailJWTSecret"),
+							{
+								expiresIn: "1d",
+							},
+							(err, emailToken) => {
+								if (err) return res.status(400).json({ message: "Verification token could not be created." });
+								const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
+								let newVerificationObj = new Verification({
+									token: emailToken,
+									userId: user.id,
+								});
 
-							transporter.sendMail(
-								{
-									to: user.email,
-									subject: "Confirm you TexChange Account Registration",
-									html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`
-								},
-								(err, info) => {
-									if (err) {
-										console.log("BACKEND FAIL: NOT SENDING VERIFICTION EMAIL!");
-										console.log(err);
-										return res.status(400).json({ message: "Could not send verification email." });
-									} else {
-										newVerificationObj
-											.save()
-											.then(() => {
-												res.json({ message: "Please check your email for verification." });
-											})
-											.catch(err => {
-												res.status(404).json({
-													success: false,
-													message: "Could not save verification object to DB, backend problem."
+								transporter.sendMail(
+									{
+										to: user.email,
+										subject: "Confirm you TexChange Account Registration",
+										html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`,
+									},
+									(err, info) => {
+										if (err) {
+											console.log("BACKEND FAIL: NOT SENDING VERIFICTION EMAIL!");
+											console.log(err);
+											return res.status(400).json({ message: "Could not send verification email." });
+										} else {
+											newVerificationObj
+												.save()
+												.then(() => {
+													res.json({ message: "Please check your email for verification." });
+												})
+												.catch((err) => {
+													res.status(404).json({
+														success: false,
+														message: "Could not save verification object to DB, backend problem.",
+													});
 												});
-											});
+										}
 									}
-								}
-							);
-						}
-					);
+								);
+							}
+						);
+					});
+					//});
 				});
 			});
-		});
+		} catch (err) {
+			console.log(err);
+		}
 	});
 });
 
@@ -129,19 +136,19 @@ router.put("/:id", auth, (req, res) => {
 		if (req.body.action == "buying") {
 			//Making offer to Buy
 
-			User.findByIdAndUpdate(req.params.id, { $push: { toBuy: req.body.bookId } }).catch(err => {
+			User.findByIdAndUpdate(req.params.id, { $push: { toBuy: req.body.bookId } }).catch((err) => {
 				return res.json({ success: false, message: "Cannot add the book to buyer's toBuys", err: err });
 			});
 
 			User.findByIdAndUpdate(req.body.sellerId, {
-				$push: { offers: { book: req.body.bookId, buyer: req.body.buyerId } }
+				$push: { offers: { book: req.body.bookId, buyer: req.body.buyerId } },
 			})
 				.then(() => res.json({ success: true }))
-				.catch(err => {
+				.catch((err) => {
 					return res.json({
 						success: false,
 						message: "Cannot make offer to seller: cannot add to seller's offers[]",
-						err: err
+						err: err,
 					});
 				});
 		} else if (req.body.action == "selling") {
@@ -149,17 +156,17 @@ router.put("/:id", auth, (req, res) => {
 
 			User.findByIdAndUpdate(req.params.id, {
 				$pull: { toSell: req.body.bookId, offers: { book: req.body.bookId, buyer: req.body.buyerId } },
-				$push: { sold: { book: req.body.bookId, buyer: req.body.buyerId } }
-			}).catch(err => {
+				$push: { sold: { book: req.body.bookId, buyer: req.body.buyerId } },
+			}).catch((err) => {
 				return res.status(404).json({
 					success: false,
 					message:
-						"Could not update seller to 1. remove the book from toSell[], 2. remove from offers[], 3. add to sold[]"
+						"Could not update seller to 1. remove the book from toSell[], 2. remove from offers[], 3. add to sold[]",
 				});
 			});
 
 			User.findByIdAndUpdate(req.body.buyerId, { $pull: { toBuy: req.body.bookId } }) //Remove from toBuy
-				.catch(err => {
+				.catch((err) => {
 					return res
 						.status(404)
 						.json({ success: false, message: "Could not update buyer to remove the book from toBuy" });
@@ -167,14 +174,14 @@ router.put("/:id", auth, (req, res) => {
 
 			Book.findByIdAndDelete(req.body.bookId) //Delete book from DB
 				.then(res.json({ success: true }))
-				.catch(err => {
+				.catch((err) => {
 					return res.status(404).json({ success: false, message: "Book could not be deleted from DB" });
 				});
 		}
 	} catch (e) {
 		res.status(404).json({
 			success: false,
-			message: "User modifying is not authenticated by token"
+			message: "User modifying is not authenticated by token",
 		});
 	}
 });
@@ -182,7 +189,7 @@ router.put("/:id", auth, (req, res) => {
 router.get("", auth, (req, res) => {
 	User.findById(req.user.id)
 		.select("-password")
-		.then(user => {
+		.then((user) => {
 			// console.log("HIT");
 			// console.log(user);
 			res.json(user);
@@ -191,10 +198,10 @@ router.get("", auth, (req, res) => {
 
 router.delete("/", auth, (req, res) => {
 	User.findById(req.user.id) //gives promise back
-		.then(user =>
+		.then((user) =>
 			user
 				.remove()
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					res.status(404).json({ success: false });
 				})
