@@ -30,25 +30,26 @@ router.post("/", (req, res) => {
 		if (!user.confirmed) {
 			return res.status(400).json({ message: "Email needs to be verified before logging in." });
 		}
-		//Compare email and password
+
 		//Validate password
+		if (!user.authenticate(password)) {
+			return res.status(400).json({ message: "Invalid credentials." });
+		}
 
-		bcrypt.compare(password, user.password).then((isMatch) => {
-			//incorrect login
-			if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-			jwt.sign({ id: user.id }, config.get("jwtSecret"), { expiresIn: 7200 }, (err, token) => {
-				if (err) throw err;
-				res.json({
-					token, //same as token = token
-					user: {
-						id: user.id,
-						name: user.name,
-						email: user.email,
-					},
-				});
+		try {
+			const token = jwt.sign({ id: user.id }, config.get("jwtSecret"), { expiresIn: 7200 });
+			return res.status(200).json({
+				token,
+				user: {
+					id: user.id,
+					name: user.name,
+					email: user.email,
+				},
 			});
-		});
+		} catch (err) {
+			console.log(err);
+			return res.status(400).json({ message: "There is a problem with the server. Please log try logging in again." });
+		}
 	});
 });
 
@@ -60,8 +61,6 @@ router.get("/user", auth, (req, res) => {
 	User.findById(req.user.id)
 		.select("-password")
 		.then((user) => {
-			// console.log("HIT");
-			// console.log(user);
 			res.json(user);
 		});
 });

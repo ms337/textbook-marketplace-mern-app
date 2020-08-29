@@ -39,6 +39,9 @@ router.post("/", (req, res) => {
 		return res.status(400).json({ message: "Please enter all the fields" }); //bad request
 	}
 
+	if (password.length < 6) {
+		return res.status(400).json({ message: "Password must atleast be 6 characters" }); //bad request
+	}
 	//Email validation for UWO only
 	validDomains = ["uwo.ca"];
 
@@ -49,7 +52,11 @@ router.post("/", (req, res) => {
 
 	//Check for existing user
 	User.findOne({ email }).then((user) => {
-		if (user) return res.status(400).json({ message: "A user account with the email already exists." });
+		if (user && user.confirmed)
+			return res.status(400).json({ message: "A user account with the email already exists." });
+
+		if (user && !user.confirmed)
+			return res.status(400).json({ message: "A user account with the email exists and neds to be verified." });
 
 		const newUser = new User({
 			name,
@@ -59,67 +66,106 @@ router.post("/", (req, res) => {
 		});
 
 		try {
-			//Create salt & hash
-			bcrypt.genSalt(10, (err, salt) => {
-				bcrypt.hash(newUser.password, salt, (err, hash) => {
-					if (err) throw err;
-					newUser.password = hash; //save password as hash
-					// bcrypt.hash(newUser.email, salt, (err, hash) => {
-					// 	if (err) throw err;
-					// newUser.email = hash; // hash email too if needed?
-					newUser.save().then((user) => {
-						jwt.sign(
-							{
-								user: user.id,
-							},
-							config.get("emailJWTSecret"),
-							{
-								expiresIn: "1d",
-							},
-							(err, emailToken) => {
-								if (err) return res.status(400).json({ message: "Verification token could not be created." });
-								const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
-								let newVerificationObj = new Verification({
-									token: emailToken,
-									userId: user.id,
-								});
+			const token = jwt.sign({ user: user.id }, config.get("emailJWTSecret"), { expiresIn: "1d" });
+		} catch (err) {
+			console.log("Could not create token.");
+			return res.status(400).json({ message: "There is a problem with the server. Please log try logging in again." });
+		}
 
-								transporter.sendMail(
-									{
-										to: user.email,
-										subject: "Confirm you TexChange Account Registration",
-										html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`,
-									},
-									(err, info) => {
-										if (err) {
-											console.log("BACKEND FAIL: NOT SENDING VERIFICTION EMAIL!");
-											console.log(err);
-											return res.status(400).json({ message: "Could not send verification email." });
-										} else {
-											newVerificationObj
-												.save()
-												.then(() => {
-													res.json({ message: "Please check your email for verification." });
-												})
-												.catch((err) => {
-													res.status(404).json({
-														success: false,
-														message: "Could not save verification object to DB, backend problem.",
-													});
-												});
-										}
-									}
-								);
-							}
-						);
+		const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
+		let newVerificationObj = new Verification({
+			token: emailToken,
+			userId: user.id,
+		});
+
+		transporter
+			.sendMail({
+				to: user.email,
+				subject: "Confirm you TexChange Account Registration",
+				html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`,
+			})
+			.then(() => newVerificationObj.save())
+			.then(() => {
+				newUser
+					.save()
+					.then(() => {
+						return res.json({ message: "Please check your email for verification." });
+					})
+					.catch((err) => {
+						return res.status(500).json({ message: "Server failed to register you. Please try again." });
 					});
-					//});
+			})
+			.catch((err) => {
+				console.log("Problem in sending mail OR creating verification object");
+				console.log(err);
+				return res.status(404).json({
+					success: false,
+					message: "Problem creating verification link, try signing up again.",
 				});
 			});
-		} catch (err) {
-			console.log(err);
-		}
 	});
+
+	// try {
+	// 	//Create salt & hash
+	// 	bcrypt.genSalt(10, (err, salt) => {
+	// 		bcrypt.hash(newUser.password, salt, (err, hash) => {
+	// 			if (err) throw err;
+	// 			newUser.password = hash; //save password as hash
+	// 			// bcrypt.hash(newUser.email, salt, (err, hash) => {
+	// 			// 	if (err) throw err;
+	// 			// newUser.email = hash; // hash email too if needed?
+	// 			newUser.save().then((user) => {
+	// 				jwt.sign(
+	// 					{
+	// 						user: user.id,
+	// 					},
+	// 					config.get("emailJWTSecret"),
+	// 					{
+	// 						expiresIn: "1d",
+	// 					},
+	// 					(err, emailToken) => {
+	// 						if (err) return res.status(400).json({ message: "Verification token could not be created." });
+	// 						const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
+	// 						let newVerificationObj = new Verification({
+	// 							token: emailToken,
+	// 							userId: user.id,
+	// 						});
+
+	// 						transporter.sendMail(
+	// 							{
+	// 								to: user.email,
+	// 								subject: "Confirm you TexChange Account Registration",
+	// 								html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`,
+	// 							},
+	// 							(err, info) => {
+	// 								if (err) {
+	// 									console.log("BACKEND FAIL: NOT SENDING VERIFICTION EMAIL!");
+	// 									console.log(err);
+	// 									return res.status(400).json({ message: "Could not send verification email." });
+	// 								} else {
+	// 									newVerificationObj
+	// 										.save()
+	// 										.then(() => {
+	// 											res.json({ message: "Please check your email for verification." });
+	// 										})
+	// 										.catch((err) => {
+	// 											res.status(404).json({
+	// 												success: false,
+	// 												message: "Could not save verification object to DB, backend problem.",
+	// 											});
+	// 										});
+	// 								}
+	// 							}
+	// 						);
+	// 					}
+	// 				);
+	// 			});
+	// 			//});
+	// 		});
+	// 	});
+	// } catch (err) {
+	// 	console.log(err);
+	// }
 });
 
 //Making offer to buy a book
@@ -208,4 +254,38 @@ router.delete("/", auth, (req, res) => {
 				.then(() => res.json({ success: true }))
 		);
 });
+
+function createVerificationLink(user) {
+	try {
+		const token = jwt.sign({ user: user.id }, config.get("emailJWTSecret"), { expiresIn: "1d" });
+	} catch (err) {
+		console.log("Could not create token.");
+		return res.status(400).json({ message: "There is a problem with the server. Please log try logging in again." });
+	}
+
+	const url = "http://" + req.get("host") + "/api/verify/" + `${emailToken}`;
+	let newVerificationObj = new Verification({
+		token: emailToken,
+		userId: user.id,
+	});
+
+	transporter
+		.sendMail({
+			to: user.email,
+			subject: "Confirm you TexChange Account Registration",
+			html: `Hi, <br> Thank you for signing up for TexChange! Please click this link to confirm your email: <a href= "${url}">Verify: ${url}</a>`,
+		})
+		.then(() => newVerificationObj.save())
+		.then(() => {
+			return true;
+		})
+		.catch((err) => {
+			console.log("Problem in sending mail OR creating verification object");
+			console.log(err);
+			return res.status(404).json({
+				success: false,
+				message: "Problem creating verification link, try signing up again.",
+			});
+		});
+}
 module.exports = router;
