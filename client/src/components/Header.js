@@ -33,6 +33,7 @@ class Header extends Component {
 	onListBooksClick = (search) => {
 		console.log(search);
 		this.props.getBooks(search);
+		window.scrollBy(0, 400);
 	};
 
 	handleKeyPress(event) {

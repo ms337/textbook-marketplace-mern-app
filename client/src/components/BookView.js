@@ -47,7 +47,7 @@ class BookView extends Component {
 		//book represent our entire state object, books represents the array
 		console.log(this.state.modal);
 		const { name, author, price, imageURL, edition, courses, quality, seller } = this.props;
-
+		console.log(edition);
 		return (
 			//make search bar here using forms and then bind to this button
 			<Fragment>

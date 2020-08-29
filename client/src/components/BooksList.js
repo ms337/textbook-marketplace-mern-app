@@ -15,19 +15,13 @@ class BooksList extends Component {
 		//action from redux is store as a prop
 		getBooks: PropTypes.func.isRequired,
 		deleteBook: PropTypes.func.isRequired,
-		book: PropTypes.object.isRequired //represent a state
+		book: PropTypes.object.isRequired, //represent a state
 	};
 
 	//Lifecycle method: api requests, actions happen here
-	componentDidMount() {
-		// this.props.getBooks();
-	}
+	componentDidMount() {}
 
-	onListBooksClick = search => {
-		this.props.getBooks();
-	};
-
-	onDeleteClick = id => {
+	onDeleteClick = (id) => {
 		this.props.deleteBook(id);
 	};
 	render() {
@@ -35,7 +29,7 @@ class BooksList extends Component {
 		const { books } = this.props.book;
 
 		const rowUnit = books.length / 4;
-		console.log(rowUnit);
+		// console.log(rowUnit);
 		const bookLayout = books.map(({ _id, name, author, price, edition, imageURL, courses, quality, seller }) => (
 			<Col lg="3" md="4" sm="4" xs="6">
 				<BookView
@@ -56,7 +50,7 @@ class BooksList extends Component {
 			//make search bar here using forms and then bind to this button
 
 			<Fragment>
-				<div>
+				<div ref={this.booksSection}>
 					<Container>
 						{/* <Row>
 							<Col lg="3" md="4" sm="4" xs="6">
@@ -78,9 +72,9 @@ class BooksList extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	//root reducer key for this componentsReducer or is it the value
-	book: state.book
+	book: state.book,
 });
 
 //mapping function, {actions to be executed},, component name

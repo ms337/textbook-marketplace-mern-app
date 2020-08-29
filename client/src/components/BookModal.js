@@ -20,12 +20,12 @@ class BookModal extends Component {
 		edition: "",
 		quality: -1,
 		seller: 0,
-		file: ""
+		file: "",
 	};
 
-	fileSelectHandler = e => {
+	fileSelectHandler = (e) => {
 		this.setState({
-			file: e.target.files[0]
+			file: e.target.files[0],
 		});
 
 		// console.log(this.state.file);
@@ -35,22 +35,28 @@ class BookModal extends Component {
 	toggle = () => {
 		this.setState({
 			//modifies state
-			modal: !this.state.modal
+			modal: !this.state.modal,
 		});
 	};
 
+	confirmClose = () => {
+		if (window.confirm("Are you sure you want to quit the form without posting?")) {
+			this.toggle();
+		}
+	};
+
 	static propTypes = {
-		isAuthenticated: PropTypes.bool
+		isAuthenticated: PropTypes.bool,
 	};
 
 	//onChange function declared below in form so that whenever something is form is changed, that is some input is given, the components state is updated"
 	//e is event parameter, could get e.target.value, using [e.target.name] refers to name prop and set it to value for whenever something else is typed in
-	onChange = e => {
+	onChange = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
 	//tag called functions have an event parameter e
-	onSubmit = e => {
+	onSubmit = (e) => {
 		e.preventDefault();
 		// const newBook = {
 		// 	//MongoDB will create id on its own
@@ -88,8 +94,9 @@ class BookModal extends Component {
 				</Fragment>
 
 				{/* Modal takes properties inside depicting its component state */}
-				<Modal isOpen={this.state.modal} toggle={this.toggle}>
-					<ModalHeader toggle={this.toggle}>Post a Listing</ModalHeader>
+				{/* Removed toggle={this.toggle} */}
+				<Modal isOpen={this.state.modal}>
+					<ModalHeader toggle={this.confirmClose}>Post a Listing</ModalHeader>
 					<ModalBody>
 						<Form onSubmit={this.onSubmit}>
 							<FormGroup>
@@ -140,13 +147,13 @@ class BookModal extends Component {
 BookModal.propTypes = {
 	//action from redux is store as a prop
 	addBook: PropTypes.func.isRequired,
-	book: PropTypes.object.isRequired //represent a state
+	book: PropTypes.object.isRequired, //represent a state
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	//root reducer key for this componentsReducer or is it the value
 	book: state.book,
-	isAuthenticated: state.auth.isAuthenticated
+	isAuthenticated: state.auth.isAuthenticated,
 });
 
 //mapping function, {actions to be executed},, component name

@@ -22,14 +22,14 @@ function escapeRegex(text) {
 cloudinary.config({
 	cloud_name: "texchange",
 	api_key: 852474873596592,
-	api_secret: "Jb2scvfgedVSMn17DphW05GJFQc"
+	api_secret: "Jb2scvfgedVSMn17DphW05GJFQc",
 });
 
 const storage = cloudinaryStorage({
 	cloudinary: cloudinary,
 	folder: "demo",
 	allowedFormats: ["jpg", "png"],
-	transformation: [{ width: 480, height: 640, crop: "limit" }]
+	transformation: [{ width: 480, height: 640, crop: "limit" }],
 });
 const parser = multer({ storage: storage });
 
@@ -43,9 +43,9 @@ router.get("/", (req, res) => {
 		// escapeRegex(req.query.search);
 		const regex = new RegExp(escapeRegex(req.query.search), "gi"); //gi are flags
 
-		Book.find({ $or: [{ name: regex }, { author: regex }] }).then(books => res.json(books));
+		Book.find({ $or: [{ name: regex }, { author: regex }] }).then((books) => res.json(books));
 	} else {
-		Book.find().then(books => res.json(books));
+		Book.find().then((books) => res.json(books));
 	}
 });
 
@@ -63,19 +63,20 @@ router.post("/", auth, parser.single("file"), (req, res) => {
 		courses: req.body.courses,
 		price: req.body.price,
 		quality: req.body.quality,
+		edition: req.body.edition,
 		seller: req.user.id,
-		imageURL: req.file.url
+		imageURL: req.file.url,
 	});
 	newBook
 		.save()
-		.then(book => {
+		.then((book) => {
 			User.findByIdAndUpdate(req.user.id, { $push: { toSell: book._id } })
 				.then(() => res.json(book))
-				.catch(err => {
+				.catch((err) => {
 					res.status(404).json({ success: false });
 				});
 		})
-		.catch(err => res.status(404).json({ success: false, message: err }));
+		.catch((err) => res.status(404).json({ success: false, message: err }));
 	//saving to DB
 });
 
@@ -86,10 +87,10 @@ router.post("/", auth, parser.single("file"), (req, res) => {
 //NEED TO FIX THIS
 router.delete("/:id", auth, (req, res) => {
 	Book.findById(req.params.id) //gives promise back
-		.then(book =>
+		.then((book) =>
 			book
 				.remove()
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					res.status(404).json({ success: false });
 				})
