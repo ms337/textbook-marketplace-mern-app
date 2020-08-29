@@ -108,12 +108,11 @@ router.post("/", (req, res) => {
 	// try {
 	// 	//Create salt & hash
 	// 	bcrypt.genSalt(10, (err, salt) => {
-	// 		bcrypt.hash(newUser.password, salt, (err, hash) => {
+	// 		console.log({ salt, password });
+	// 		bcrypt.hash(password, salt, (err, hash) => {
 	// 			if (err) throw err;
 	// 			newUser.password = hash; //save password as hash
-	// 			// bcrypt.hash(newUser.email, salt, (err, hash) => {
-	// 			// 	if (err) throw err;
-	// 			// newUser.email = hash; // hash email too if needed?
+
 	// 			newUser.save().then((user) => {
 	// 				jwt.sign(
 	// 					{
