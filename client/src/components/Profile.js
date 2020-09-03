@@ -13,7 +13,7 @@ class ProfileModal extends Component {
 	//whenever form, form input pieces needs to have pieces of state in component
 	state = {
 		modal: false,
-		deleteModal: false
+		deleteModal: false,
 	};
 
 	componentDidMount() {
@@ -24,13 +24,13 @@ class ProfileModal extends Component {
 	toggle = () => {
 		this.setState({
 			//modifies state
-			modal: !this.state.modal
+			modal: !this.state.modal,
 		});
 	};
 
 	toggleDeleteModal = () => {
 		this.setState({
-			deleteModal: !this.state.deleteModal
+			deleteModal: !this.state.deleteModal,
 		});
 	};
 
@@ -40,7 +40,7 @@ class ProfileModal extends Component {
 
 	static propTypes = {
 		isLoading: PropTypes.bool,
-		profile: PropTypes.object
+		profile: PropTypes.object,
 	};
 
 	render() {
@@ -49,7 +49,7 @@ class ProfileModal extends Component {
 			<div>
 				<Fragment>
 					<NavLink style={{ color: "black" }} onClick={this.toggle}>
-						Account
+						Profile
 					</NavLink>
 				</Fragment>
 
@@ -98,10 +98,10 @@ class ProfileModal extends Component {
 
 //can also do this as static proptypes?
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	//root reducer key for this componentsReducer or is it the value
 	profile: state.profile,
-	isLoading: state.profile.isLoading
+	isLoading: state.profile.isLoading,
 });
 
 //mapping function, {actions to be executed},, component name

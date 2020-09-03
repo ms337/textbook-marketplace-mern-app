@@ -12,26 +12,26 @@ var UserSchema = new Schema(
 		password: { type: String, required: true },
 		name: {
 			type: String,
-			required: true
+			required: true,
 		},
 		toBuy: [{ type: Schema.Types.ObjectId, ref: "Book" }],
 		toSell: [{ type: Schema.Types.ObjectId, ref: "Book" }],
 		offers: [
 			{
 				book: { type: Schema.Types.ObjectId, ref: "Book" },
-				buyer: { type: Schema.Types.ObjectId, ref: "User" }
-			}
+				buyer: { type: Schema.Types.ObjectId, ref: "User" },
+			},
 		],
 		sold: [
 			{
 				book: { type: Schema.Types.ObjectId, ref: "Book" },
-				buyer: { type: Schema.Types.ObjectId, ref: "User" }
-			}
+				buyer: { type: Schema.Types.ObjectId, ref: "User" },
+			},
 		],
 		confirmed: {
 			type: Schema.Types.Boolean,
-			required: true
-		}
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );
