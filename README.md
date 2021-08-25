@@ -1,6 +1,6 @@
 # TexChange: A Textbook Marketplace Web App
 
-Designed, architected and implement a textbook marketplace app with the MERN Stack. 
+Designed, architected and implemented a textbook marketplace app with the MERN Stack. 
 
 
 
